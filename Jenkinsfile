@@ -80,14 +80,11 @@ pipeline {
                 script {
                     dir('deploy/tools/railyard') {
                         withEnv(["HOME=${env.WORKSPACE}"]) {
-                            sh 'ls -la'
-                            sh 'echo $HOME'
                             sh "pip install -r requirements.txt --user"
-                            sh 'pip install . --upgrade --force-reinstall --user'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/R.yaml stacks/java.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml manifests'
+                            sh 'pip install . --user'
+                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/R.yaml stacks/java.yaml stacks/scala.yaml stacks/cpp.yaml stacks/julia.yaml stacks/octave.yaml stacks/bash.yaml manifests'
                             sh 'ls -la manifests/'
-                            sh 'cat manifests/Dockerfile'
                         }
                     }
                 }
