@@ -90,24 +90,27 @@ pipeline {
                 }
             }
         }
-        // stage('Build Jupyter Notebook Docker') {
-        //     when {
-        //         environment name: 'SKIP_BUILD', value: 'false'
-        //         // environment name: 'BUILD_NOTEBOOK', value: '0'
-        //     }
-        //     steps {
-        //         script {
-        //             dir('deploy/docker/notebook') {
-        //                 sh 'echo "Building notebook image"'
-        //                 // docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
-        //                 //     def image = docker.build('labshare/polyglot-notebook:latest', '--no-cache ./')
-        //                 //     image.push()
-        //                 //     image.push(env.NOTEBOOK_VERSION)
-        //                 // }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build Jupyter Notebook Docker') {
+            when {
+                environment name: 'SKIP_BUILD', value: 'false'
+                // environment name: 'BUILD_NOTEBOOK', value: '0'
+            }
+            steps {
+                script {
+                    dir('deploy/tools/railyard/manifests') {
+                        def containerVariants = sh(returnStdout: true, script: 'ls -d *').trim().split(System.getProperty("line.separator"))
+                        containerVariants.each {
+                            println """Building container tag: ${it}"""
+                            docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
+                                def image = docker.build("""labshare/polyglot-notebook:${it}""", '--no-cache ./')
+                                image.push()
+                                // image.push(env.NOTEBOOK_VERSION)
+                            }
+                        }
+                    }
+                }
+            }
+        }
         // stage('Build Notebooks documentation') {
         //     when {
         //         environment name: 'SKIP_BUILD', value: 'false'
