@@ -98,7 +98,7 @@ pipeline {
             steps {
                 script {
                     dir('deploy/tools/railyard/manifests') {
-                        def files = findFiles(glob: '.')
+                        def files = findFiles(glob: '*')
                         echo """${files[0].name} ${files[0].path} ${files[0].directory} ${files[0].length} ${files[0].lastModified}"""
                         // def containerVariants = sh(returnStdout: true, script: 'ls -d *').trim().split(System.getProperty("line.separator"))
                         // containerVariants.each {
