@@ -70,9 +70,11 @@ pipeline {
         }
         stage('Assemble Jupyter Notebook Docker files') {
             agent {
-                image 'python:3.7'
-                args '--network=host'
-                reuseNode true
+                docker {
+                    image 'python:3.7'
+                    args '--network=host'
+                    reuseNode true
+                }
             }
             steps {
                 script {
