@@ -68,10 +68,32 @@ pipeline {
                 }
             }
         }
+        stage('Assemble Jupyter Notebook Docker files') {
+            agent {
+                image 'python:3.7'
+                args '--network=host'
+                reuseNode true
+            }
+            steps {
+                script {
+                    dir('deploy/tools/railyard') {
+                        withEnv(["HOME=${env.WORKSPACE}"]) {
+                            sh 'ls -la'
+                            sh 'echo $HOME'
+                            sh "pip install -r requirements.txt --user"
+                            sh 'pip install . --user'
+                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/R.yaml stacks/java.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml manifests'
+                            sh 'ls -la manifests/*'
+                        }
+                    }
+                }
+            }
+        }
         stage('Build Jupyter Notebook Docker') {
             when {
                 environment name: 'SKIP_BUILD', value: 'false'
-                environment name: 'BUILD_NOTEBOOK', value: '0'
+                // environment name: 'BUILD_NOTEBOOK', value: '0'
             }
             steps {
                 script {
