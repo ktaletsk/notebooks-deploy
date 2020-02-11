@@ -102,17 +102,13 @@ pipeline {
                         files.each {
                             def tag = it.path.minus(it.name).minus('/')
                             println """Building container tag: ${tag}"""
-                        }
-                        // def containerVariants = sh(returnStdout: true, script: 'ls -d *').trim().split(System.getProperty("line.separator"))
-                        // containerVariants.each {
-                            // 
 
-                            // docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
-                                // def image = docker.build("""labshare/polyglot-notebook:${it}""", '--no-cache ./')
-                                // image.push()
+                            docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
+                                def image = docker.build("""labshare/polyglot-notebook:${tag}""", '--no-cache ./')
+                                image.push()
                                 // image.push(env.NOTEBOOK_VERSION)
-                            // }
-                        // }
+                            }
+                        }
                     }
                 }
             }
