@@ -118,7 +118,6 @@ def assembleStack(stack_obj, path):
     package_hash = stack_obj['package_hash']
 
     # Open path and start assembling file
-    print(f'Changing current path to: {path}')
     with tools.cd(path):
         print('Assembling files for container ' + package_hash + ' in ' + path)
         
