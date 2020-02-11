@@ -7,7 +7,7 @@ def cd(path):
     os.chdir(path)
     try:
         yield
-    except:
+    except e:
         print(f'Could not change path to: {path}. Error log: {e}')
     finally:
         os.chdir(CWD)
