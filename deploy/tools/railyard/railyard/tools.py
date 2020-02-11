@@ -3,6 +3,7 @@ import os
 
 @contextlib.contextmanager
 def cd(path):
+    print(f'Temporarily chaning os.path to: {path}')
     CWD = os.getcwd()
     os.chdir(path)
     try:
