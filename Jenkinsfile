@@ -100,7 +100,7 @@ pipeline {
                     dir('deploy/tools/railyard/manifests') {
                         def files = findFiles(glob: '**/Dockerfile')
                         files.each {
-                            echo """${it.name} ${it.path} ${it.directory} ${it.length} ${it.lastModified}"""
+                            echo """${it.name} ${it.path} ${it.path.minus(it.name)} ${it.directory} ${it.length} ${it.lastModified}"""
                         }
                         // def containerVariants = sh(returnStdout: true, script: 'ls -d *').trim().split(System.getProperty("line.separator"))
                         // containerVariants.each {
