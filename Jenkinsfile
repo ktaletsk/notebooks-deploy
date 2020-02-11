@@ -84,8 +84,6 @@ pipeline {
                             sh 'echo $HOME'
                             sh "pip install -r requirements.txt --user"
                             sh 'pip install . --upgrade --force-reinstall --user'
-                            sh 'mkdir -p manifests'
-                            sh 'ls -la manifests/'
                             sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/R.yaml stacks/java.yaml manifests'
                             sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml manifests'
                             sh 'ls -la manifests/'
