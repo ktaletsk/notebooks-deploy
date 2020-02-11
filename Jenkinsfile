@@ -109,7 +109,7 @@ pipeline {
                                 // image.push()
                                 // image.push(env.NOTEBOOK_VERSION)
                             // }
-                        }
+                        // }
                     }
                 }
             }
