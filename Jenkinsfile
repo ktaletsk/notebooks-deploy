@@ -92,79 +92,80 @@ pipeline {
                 }
             }
         }
-        stage('Build Jupyter Notebook Docker') {
-            when {
-                environment name: 'SKIP_BUILD', value: 'false'
-                // environment name: 'BUILD_NOTEBOOK', value: '0'
-            }
-            steps {
-                script {
-                    dir('deploy/docker/notebook') {
-                        docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
-                            def image = docker.build('labshare/polyglot-notebook:latest', '--no-cache ./')
-                            image.push()
-                            image.push(env.NOTEBOOK_VERSION)
-                        }
-                    }
-                }
-            }
-        }
-        stage('Build Notebooks documentation') {
-            when {
-                environment name: 'SKIP_BUILD', value: 'false'
-                environment name: 'BUILD_DOCS', value: '0'
-            }
-            steps {
-                script {
-                    sh "mv docs/* deploy/docker/docs"
-                    dir('deploy/docker/docs') {
-                        docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
-                            def image = docker.build('labshare/notebook-docs:latest', '--no-cache ./')
-                            image.push()
-                            image.push(env.DOCS_VERSION)
-                        }
-                    }
-                }
-            }
-        }
-        stage('Deploy JupyterHub to Kubernetes') {
-            steps {
-                dir('deploy/kubernetes') {
-                    // Config JSON file is stored in Jenkins and should contain sensitive environment values.
-                    configFileProvider([configFile(fileId: 'env-ci', targetLocation: 'env-ci.json')]) {
-                        script {
-                            def urls = readJSON file: 'env-ci.json'
+        // stage('Build Jupyter Notebook Docker') {
+        //     when {
+        //         environment name: 'SKIP_BUILD', value: 'false'
+        //         // environment name: 'BUILD_NOTEBOOK', value: '0'
+        //     }
+        //     steps {
+        //         script {
+        //             dir('deploy/docker/notebook') {
+        //                 sh 'echo "Building notebook image"'
+        //                 // docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
+        //                 //     def image = docker.build('labshare/polyglot-notebook:latest', '--no-cache ./')
+        //                 //     image.push()
+        //                 //     image.push(env.NOTEBOOK_VERSION)
+        //                 // }
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('Build Notebooks documentation') {
+        //     when {
+        //         environment name: 'SKIP_BUILD', value: 'false'
+        //         environment name: 'BUILD_DOCS', value: '0'
+        //     }
+        //     steps {
+        //         script {
+        //             sh "mv docs/* deploy/docker/docs"
+        //             dir('deploy/docker/docs') {
+        //                 docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
+        //                     def image = docker.build('labshare/notebook-docs:latest', '--no-cache ./')
+        //                     image.push()
+        //                     image.push(env.DOCS_VERSION)
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('Deploy JupyterHub to Kubernetes') {
+        //     steps {
+        //         dir('deploy/kubernetes') {
+        //             // Config JSON file is stored in Jenkins and should contain sensitive environment values.
+        //             configFileProvider([configFile(fileId: 'env-ci', targetLocation: 'env-ci.json')]) {
+        //                 script {
+        //                     def urls = readJSON file: 'env-ci.json'
                             
-                            sh "sed -i 's/SHARED_STORAGE_VALUE/${SHARED_STORAGE}/g' storage.yaml"
-                            sh "sed -i 's/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g' storage.yaml"
-                            sh "sed -i 's/NOTEBOOK_VERSION_VALUE/${NOTEBOOK_VERSION}/g' jupyterhub-configs.yaml"
-                            sh "sed -i 's/STORAGE_PER_USER_VALUE/${STORAGE_PER_USER}/g' jupyterhub-configs.yaml"
-                            sh "sed -i 's/WIPP_STORAGE_PVC_VALUE/${WIPP_STORAGE_PVC}/g' jupyterhub-configs.yaml"
-                            sh "sed -i 's|WIPP_UI_VALUE|${urls.wipp_ui}|g' jupyterhub-configs.yaml"
-                            sh "sed -i 's|WIPP_API_INTERNAL_VALUE|${urls.wipp_api_internal}|g' jupyterhub-configs.yaml"
-                            sh "sed -i 's|WIPP_NOTEBOOKS_PATH_VALUE|${urls.notebooks_path}|g' jupyterhub-configs.yaml"
-                            sh "sed -i 's/HUB_VERSION_VALUE/${HUB_VERSION}/g' jupyterhub-deployment.yaml"
-                            sh "sed -i 's|JUPYTERHUB_URL_VALUE|${urls.jupyterhub_url}|g' jupyterhub-services.yaml"
+        //                     sh "sed -i 's/SHARED_STORAGE_VALUE/${SHARED_STORAGE}/g' storage.yaml"
+        //                     sh "sed -i 's/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g' storage.yaml"
+        //                     sh "sed -i 's/NOTEBOOK_VERSION_VALUE/${NOTEBOOK_VERSION}/g' jupyterhub-configs.yaml"
+        //                     sh "sed -i 's/STORAGE_PER_USER_VALUE/${STORAGE_PER_USER}/g' jupyterhub-configs.yaml"
+        //                     sh "sed -i 's/WIPP_STORAGE_PVC_VALUE/${WIPP_STORAGE_PVC}/g' jupyterhub-configs.yaml"
+        //                     sh "sed -i 's|WIPP_UI_VALUE|${urls.wipp_ui}|g' jupyterhub-configs.yaml"
+        //                     sh "sed -i 's|WIPP_API_INTERNAL_VALUE|${urls.wipp_api_internal}|g' jupyterhub-configs.yaml"
+        //                     sh "sed -i 's|WIPP_NOTEBOOKS_PATH_VALUE|${urls.notebooks_path}|g' jupyterhub-configs.yaml"
+        //                     sh "sed -i 's/HUB_VERSION_VALUE/${HUB_VERSION}/g' jupyterhub-deployment.yaml"
+        //                     sh "sed -i 's|JUPYTERHUB_URL_VALUE|${urls.jupyterhub_url}|g' jupyterhub-services.yaml"
 
-                            // Calculate config hash after substitution to connect configuration changes to deployment
-                            env.CONFIG_HASH = sh(script: "shasum jupyterhub-configs.yaml | cut -d ' ' -f 1 | tr -d '\n'", returnStdout: true)
+        //                     // Calculate config hash after substitution to connect configuration changes to deployment
+        //                     env.CONFIG_HASH = sh(script: "shasum jupyterhub-configs.yaml | cut -d ' ' -f 1 | tr -d '\n'", returnStdout: true)
 
-                            sh "sed -i 's/CONFIG_HASH_VALUE/${CONFIG_HASH}/g' jupyterhub-deployment.yaml"
-                        }
-                    }
+        //                     sh "sed -i 's/CONFIG_HASH_VALUE/${CONFIG_HASH}/g' jupyterhub-deployment.yaml"
+        //                 }
+        //             }
                     
-                    withAWS(credentials:'aws-jenkins-eks') {
-                        sh "aws --region ${AWS_REGION} eks update-kubeconfig --name ${KUBERNETES_CLUSTER_NAME}"
+        //             withAWS(credentials:'aws-jenkins-eks') {
+        //                 sh "aws --region ${AWS_REGION} eks update-kubeconfig --name ${KUBERNETES_CLUSTER_NAME}"
 
-                        sh '''
-                            kubectl apply -f storage.yaml
-                            kubectl apply -f jupyterhub-configs.yaml
-                            kubectl apply -f jupyterhub-services.yaml
-                            kubectl apply -f jupyterhub-deployment.yaml
-                        '''
-                    }
-                }
-            }
-        }
+        //                 sh '''
+        //                     kubectl apply -f storage.yaml
+        //                     kubectl apply -f jupyterhub-configs.yaml
+        //                     kubectl apply -f jupyterhub-services.yaml
+        //                     kubectl apply -f jupyterhub-deployment.yaml
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
