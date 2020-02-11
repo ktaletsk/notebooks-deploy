@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        node { label 'linux && build && aws' }
+        node { label 'aws && ci && linux && polus' }
     }
     parameters {
         booleanParam(name: 'SKIP_BUILD', defaultValue: false, description: 'Skips Docker builds')
@@ -9,6 +9,7 @@ pipeline {
     }
     environment {
         PROJECT_NAME = "labshare/notebooks-deploy"
+        DOCKER_CLI_EXPERIMENTAL = "enabled"
         BUILD_HUB = """${sh (
             script: "git diff --name-only ${GIT_PREVIOUS_SUCCESSFUL_COMMIT} ${GIT_COMMIT} | grep 'jupyterhub/VERSION'",
             returnStatus: true
@@ -24,9 +25,6 @@ pipeline {
         HUB_VERSION = readFile(file: 'deploy/docker/jupyterhub/VERSION')
         NOTEBOOK_VERSION = readFile(file: 'deploy/docker/notebook/VERSION')
         DOCS_VERSION = readFile(file: 'deploy/docker/docs/VERSION')
-        STORAGE_PER_USER = "1Gi"
-        STORAGE_CLASS = "rook-cephfs"
-        SHARED_STORAGE = "5Gi"
         WIPP_STORAGE_PVC = "wipp-pv-claim"
     }
     triggers {
@@ -58,6 +56,7 @@ pipeline {
             }
             steps {
                 script {
+                    sh 'cp -r deploy/docker/notebook/stacks deploy/docker/jupyterhub'
                     dir('deploy/docker/jupyterhub') {
                         docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
                             def image = docker.build('labshare/jupyterhub:latest', '--no-cache ./')
@@ -68,18 +67,101 @@ pipeline {
                 }
             }
         }
-        stage('Build Jupyter Notebook Docker') {
+        stage('Assemble Jupyter Notebook Docker files') {
             when {
                 environment name: 'SKIP_BUILD', value: 'false'
-                environment name: 'BUILD_NOTEBOOK', value: '0'
+            }
+            agent {
+                docker {
+                    image 'python:3.7'
+                    args '--network=host'
+                    reuseNode true
+                }
             }
             steps {
                 script {
-                    dir('deploy/docker/notebook') {
-                        docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
-                            def image = docker.build('labshare/polyglot-notebook:latest', '--no-cache ./')
-                            image.push()
-                            image.push(env.NOTEBOOK_VERSION)
+                    dir('deploy/docker/notebook/stacks') {
+                        withEnv(["HOME=${env.WORKSPACE}"]) {
+                            sh 'pip install railyard-builder'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml julia.yaml octave.yaml java.yaml scala.yaml cpp.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml julia.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml octave.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml java.yaml scala.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml julia.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml octave.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml java.yaml scala.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml octave.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml java.yaml scala.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml java.yaml scala.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml cpp.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml cpp.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base_gpu.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base_gpu.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml julia.yaml octave.yaml java.yaml scala.yaml cpp.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                        }
+                    }
+                }
+            }
+        }
+        stage('Build Jupyter Notebook Docker') {
+            when {
+                environment name: 'SKIP_BUILD', value: 'false'
+                // environment name: 'BUILD_NOTEBOOK', value: '0'
+            }
+            steps {
+                script {
+                    sh """echo '{"experimental": "enabled"}' > ~/config.json"""
+                    dir('deploy/docker/notebook/stacks/manifests') {
+                        def files = findFiles(glob: '**/Dockerfile')
+                        files.each {
+                            def tag = it.path.minus(it.name).minus('/')
+                            TAG_EXISTS = sh (
+                                script: """docker --config ~/ manifest inspect labshare/polyglot-notebook:${tag} > /dev/null""",
+                                returnStatus: true
+                            ) == 0
+
+                            println """${TAG_EXISTS}"""
+
+                            if (TAG_EXISTS) {
+                                println """Contianer image ${tag} already exists in registry. Skipping building and pushing"""
+                            }
+                            else {
+                                dir("""${tag}""") {
+                                    docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
+                                        println """Building container image: ${tag}..."""
+                                        def image = docker.build("""labshare/polyglot-notebook:${tag}""", '--no-cache ./')
+                                        println """Pushing container image: ${tag}..."""
+                                        image.push()
+                                    }
+                                }
+                                println """Removing container image: ${tag}"""
+                                sh """docker rmi labshare/polyglot-notebook:${tag} -f"""
+                            }
                         }
                     }
                 }
@@ -105,41 +187,21 @@ pipeline {
         }
         stage('Deploy JupyterHub to Kubernetes') {
             steps {
-                dir('deploy/kubernetes') {
-                    // Config JSON file is stored in Jenkins and should contain sensitive environment values.
-                    configFileProvider([configFile(fileId: 'env-ci', targetLocation: 'env-ci.json')]) {
-                        script {
-                            def urls = readJSON file: 'env-ci.json'
-                            
-                            sh "sed -i 's/SHARED_STORAGE_VALUE/${SHARED_STORAGE}/g' storage.yaml"
-                            sh "sed -i 's/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g' storage.yaml"
-                            sh "sed -i 's/NOTEBOOK_VERSION_VALUE/${NOTEBOOK_VERSION}/g' jupyterhub-configs.yaml"
-                            sh "sed -i 's/STORAGE_PER_USER_VALUE/${STORAGE_PER_USER}/g' jupyterhub-configs.yaml"
-                            sh "sed -i 's/WIPP_STORAGE_PVC_VALUE/${WIPP_STORAGE_PVC}/g' jupyterhub-configs.yaml"
-                            sh "sed -i 's|WIPP_UI_VALUE|${urls.wipp_ui}|g' jupyterhub-configs.yaml"
-                            sh "sed -i 's|WIPP_API_INTERNAL_VALUE|${urls.wipp_api_internal}|g' jupyterhub-configs.yaml"
-                            sh "sed -i 's|WIPP_NOTEBOOKS_PATH_VALUE|${urls.notebooks_path}|g' jupyterhub-configs.yaml"
-                            sh "sed -i 's/HUB_VERSION_VALUE/${HUB_VERSION}/g' jupyterhub-deployment.yaml"
-                            sh "sed -i 's|JUPYTERHUB_URL_VALUE|${urls.jupyterhub_url}|g' jupyterhub-services.yaml"
-
-                            // Calculate config hash after substitution to connect configuration changes to deployment
-                            env.CONFIG_HASH = sh(script: "shasum jupyterhub-configs.yaml | cut -d ' ' -f 1 | tr -d '\n'", returnStdout: true)
-
-                            sh "sed -i 's/CONFIG_HASH_VALUE/${CONFIG_HASH}/g' jupyterhub-deployment.yaml"
-                        }
-                    }
-                    
+                // Config JSON file is stored in Jenkins and should contain sensitive environment values.                
+                configFileProvider([configFile(fileId: 'env-ci', targetLocation: '.env')]) {
                     withAWS(credentials:'aws-jenkins-eks') {
                         sh "aws --region ${AWS_REGION} eks update-kubeconfig --name ${KUBERNETES_CLUSTER_NAME}"
-
-                        sh '''
-                            kubectl apply -f storage.yaml
-                            kubectl apply -f jupyterhub-configs.yaml
-                            kubectl apply -f jupyterhub-services.yaml
-                            kubectl apply -f jupyterhub-deployment.yaml
-                        '''
+                        sh "./deploy.sh"
                     }
                 }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                cleanWs()
+                sh 'docker system prune -a'
             }
         }
     }
