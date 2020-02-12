@@ -84,6 +84,8 @@ pipeline {
                             sh 'pip install . --user'
                             sh '$HOME/.local/bin/railyard assemble stacks/base.yaml manifests'
                             sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/R.yaml stacks/java.yaml stacks/scala.yaml stacks/cpp.yaml stacks/julia.yaml stacks/octave.yaml stacks/bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble stacks/base_gpu.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble stacks/base_gpu.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/R.yaml stacks/java.yaml stacks/scala.yaml stacks/cpp.yaml stacks/julia.yaml stacks/octave.yaml stacks/bash.yaml stacks/pytorch.yaml stacks/tensorflow.yaml stacks/fastai.yaml manifests'
                             sh 'ls -la manifests/'
                         }
                     }
@@ -106,7 +108,6 @@ pipeline {
                                 docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
                                     def image = docker.build("""labshare/polyglot-notebook:${tag}""", '--no-cache ./')
                                     image.push()
-                                    // image.push(env.NOTEBOOK_VERSION)
                                 }
                             }
                         }
