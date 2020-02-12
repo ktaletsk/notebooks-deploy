@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        node { label 'linux && build && aws' }
+        node { label 'aws && ci && linux && polus' }
     }
     parameters {
         booleanParam(name: 'SKIP_BUILD', defaultValue: false, description: 'Skips Docker builds')
