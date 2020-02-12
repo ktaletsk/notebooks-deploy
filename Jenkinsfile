@@ -85,7 +85,7 @@ pipeline {
                             sh '$HOME/.local/bin/railyard assemble stacks/base.yaml manifests'
                             sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/R.yaml stacks/java.yaml stacks/scala.yaml stacks/cpp.yaml stacks/julia.yaml stacks/octave.yaml stacks/bash.yaml manifests'
                             sh '$HOME/.local/bin/railyard assemble stacks/base_gpu.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base_gpu.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/R.yaml stacks/java.yaml stacks/scala.yaml stacks/cpp.yaml stacks/julia.yaml stacks/octave.yaml stacks/bash.yaml stacks/pytorch.yaml stacks/tensorflow.yaml stacks/fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble stacks/base_gpu.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/R.yaml stacks/java.yaml stacks/scala.yaml stacks/cpp.yaml stacks/julia.yaml stacks/octave.yaml stacks/bash.yaml stacks/tensorflow.yaml stacks/fastai.yaml manifests'
                             sh 'ls -la manifests/'
                         }
                     }
