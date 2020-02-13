@@ -1,5 +1,5 @@
 name: base
-base: "ktaletsk/gpu:bionic-20190612@sha256:3eb7f52566f83cbcd5aac5f52f499e2034ef5674c2e350fe3f9105e774533fca"
+base: "ktaletsk/gpu:bionic-20190612@sha256:38516d833641e6ad6986fffdea515be01b5797856a29445acd8cba425be615a4"
 dependencies:
   env:
     - PATH: $CONDA_DIR/bin:$PATH
