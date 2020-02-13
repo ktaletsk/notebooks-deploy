@@ -9,7 +9,7 @@ pipeline {
     }
     environment {
         PROJECT_NAME = "labshare/notebooks-deploy"
-        DOCKER_CLI_EXPERIMENTAL = enabled
+        DOCKER_CLI_EXPERIMENTAL = "enabled"
         BUILD_HUB = """${sh (
             script: "git diff --name-only ${GIT_PREVIOUS_SUCCESSFUL_COMMIT} ${GIT_COMMIT} | grep 'jupyterhub/VERSION'",
             returnStatus: true
