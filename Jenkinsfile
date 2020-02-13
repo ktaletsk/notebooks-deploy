@@ -112,21 +112,21 @@ pipeline {
 
                             println """${TAG_EXISTS}"""
 
-                            // if (TAG_EXISTS) {
-                            //     println """Contianer image ${tag} already exists in registry. Skipping building and pushing"""
-                            // }
-                            // else {
-                            //     dir("""${tag}""") {
-                            //         docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
-                            //             println """Building container image: ${tag}..."""
-                            //             def image = docker.build("""labshare/polyglot-notebook:${tag}""", '--no-cache ./')
-                            //             println """Pushing container image: ${tag}..."""
-                            //             image.push()
-                            //         }
-                            //     }
-                            //     println """Removing container image: ${tag}"""
-                            //     sh """docker rmi labshare/polyglot-notebook:${tag} -f"""
-                            // }
+                            if (TAG_EXISTS) {
+                                println """Contianer image ${tag} already exists in registry. Skipping building and pushing"""
+                            }
+                            else {
+                                dir("""${tag}""") {
+                                    docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
+                                        println """Building container image: ${tag}..."""
+                                        def image = docker.build("""labshare/polyglot-notebook:${tag}""", '--no-cache ./')
+                                        println """Pushing container image: ${tag}..."""
+                                        image.push()
+                                    }
+                                }
+                                println """Removing container image: ${tag}"""
+                                sh """docker rmi labshare/polyglot-notebook:${tag} -f"""
+                            }
                         }
                     }
                 }
