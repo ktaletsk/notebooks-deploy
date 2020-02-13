@@ -103,14 +103,26 @@ pipeline {
                         def files = findFiles(glob: '**/Dockerfile')
                         files.each {
                             def tag = it.path.minus(it.name).minus('/')
-                            println """Building container tag: ${tag}"""
-                            dir("""${tag}""") {
-                                docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
-                                    def image = docker.build("""labshare/polyglot-notebook:${tag}""", '--no-cache ./')
-                                    image.push()
-                                }
+                            TAG_EXISTS = sh (
+                                script: """docker manifest inspect ${tag}""",
+                                returnStatus: true
+                            ) == 0
+
+                            if (TAG_EXISTS) {
+                                println """Contianer image ${tag} already exists in registry. Skipping building and pushing"""
                             }
-                            sh """docker rmi labshare/polyglot-notebook:${tag} -f"""
+                            else {
+                                dir("""${tag}""") {
+                                    docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
+                                        println """Building container image: ${tag}..."""
+                                        def image = docker.build("""labshare/polyglot-notebook:${tag}""", '--no-cache ./')
+                                        println """Pushing container image: ${tag}..."""
+                                        image.push()
+                                    }
+                                }
+                                println """Removing container image: ${tag}"""
+                                sh """docker rmi labshare/polyglot-notebook:${tag} -f"""
+                            }
                         }
                     }
                 }
