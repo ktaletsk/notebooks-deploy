@@ -106,7 +106,7 @@ pipeline {
                         files.each {
                             def tag = it.path.minus(it.name).minus('/')
                             TAG_EXISTS = sh (
-                                script: """docker --config ~/ manifest inspect labshare/polyglot-notebook:c${tag}""",
+                                script: """docker --config ~/ manifest inspect labshare/polyglot-notebook:${tag}""",
                                 returnStatus: true
                             ) == 0
 
