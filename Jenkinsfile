@@ -100,13 +100,13 @@ pipeline {
             }
             steps {
                 script {
-                    sh """echo '{"experimental": "enabled"}' > ~/.docker/config.json"""
+                    sh """echo '{"experimental": "enabled"}' > ~/config.json"""
                     dir('deploy/tools/railyard/manifests') {
                         def files = findFiles(glob: '**/Dockerfile')
                         files.each {
                             def tag = it.path.minus(it.name).minus('/')
                             TAG_EXISTS = sh (
-                                script: """docker manifest inspect ${tag}""",
+                                script: """docker --config ~/ manifest inspect ${tag}""",
                                 returnStatus: true
                             ) == 0
 
