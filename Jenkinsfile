@@ -110,6 +110,7 @@ pipeline {
                                     image.push()
                                 }
                             }
+                            sh """docker rmi labshare/polyglot-notebook:${tag} -f"""
                         }
                     }
                 }
