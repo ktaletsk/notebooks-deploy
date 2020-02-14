@@ -6,3 +6,4 @@ voila
 ipywidgets
 numpy
 pyyaml
+../deploy/tools/railyard
