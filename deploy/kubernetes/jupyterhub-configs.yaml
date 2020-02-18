@@ -8,13 +8,17 @@ data:
     from oauthenticator.generic import LocalGenericOAuthenticator
     from railyard.assembler import readStacks, get_hash
 
+    def calculate_user_image_from_choices():
+        print(c.KubeSpawner.user_options.get('value1', None))
+        return 'labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
+
     c = get_config()
 
     c.JupyterHub.spawner_class='kubespawner.KubeSpawner'
     c.KubeSpawner.start_timeout=1000
 
     # Which container to spawn
-    c.KubeSpawner.image_spec='labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
+    c.KubeSpawner.image_spec=calculate_user_image_from_choices()
     c.KubeSpawner.default_url = '/lab'
     c.KubeSpawner.uid = 1000 #uid 1000 corresponds to jovyan, uid 0 to root
     c.KubeSpawner.cmd = ['jupyter-labhub']
@@ -22,17 +26,17 @@ data:
     c.KubeSpawner.service_account='jupyteruser-sa'
 
     # Give users options to choose the image
-    # c.KubeSpawner.options_form = """
-    # Set your key:
-    #     Choose language kernels and/or packages:
-    #     <br>
-    #     <input type="checkbox" id="option1" name="option1" value="1">
-    #     <label for="option1"> Python Data Science</label><br>
-    #     <input type="checkbox" id="option2" name="option2" value="2">
-    #     <label for="option2"> R</label><br>
-    #     <input type="checkbox" id="option3" name="option3" value="3">
-    #     <label for="option3"> Julia</label><br><br>
-    # """
+    c.KubeSpawner.options_form = """
+    Set your key:
+        Choose language kernels and/or packages:
+        <br>
+        <input type="checkbox" id="option1" name="option1" value1="1">
+        <label for="option1"> Python Data Science</label><br>
+        <input type="checkbox" id="option2" name="option2" value2="2">
+        <label for="option2"> R</label><br>
+        <input type="checkbox" id="option3" name="option3" value3="3">
+        <label for="option3"> Julia</label><br><br>
+    """
 
     # images = [
     #     'labshare/polyglot-notebook:f78a3c0775b838a92c9045f62c81e20b651e8abdb7bd6ab061807b4ae607a5b2',
