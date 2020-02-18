@@ -8,44 +8,93 @@ data:
     from oauthenticator.generic import LocalGenericOAuthenticator
     from railyard.assembler import readStacks, get_hash
 
-    c = get_config()
+    from jupyterhub.spawner import KubeSpawner
 
-    c.JupyterHub.spawner_class='kubespawner.KubeSpawner'
-    c.KubeSpawner.start_timeout=1000
+    class DemoFormSpawner(KubeSpawner):
+        def _options_form_default(self):
+            default_env = "YOURNAME=%s\n" % self.user.name
+            return """
+            <div class="form-group">
+                <label for="args">Extra notebook CLI arguments</label>
+                <input name="args" class="form-control"
+                    placeholder="e.g. --debug"></input>
+            </div>
+            <div class="form-group">
+                <label for="env">Environment variables (one per line)</label>
+                <textarea class="form-control" name="env">{env}</textarea>
+            </div>
+            """.format(
+                env=default_env
+            )
+    
+        def options_from_form(self, formdata):
+            options = {}
+            options['env'] = env = {}
+    
+            env_lines = formdata.get('env', [''])
+            for line in env_lines[0].splitlines():
+                if line:
+                    key, value = line.split('=', 1)
+                    env[key.strip()] = value.strip()
+    
+            arg_s = formdata.get('args', [''])[0].strip()
+            if arg_s:
+                options['argv'] = shlex.split(arg_s)
+            return options
+    
+        def get_args(self):
+            """Return arguments to pass to the notebook server"""
+            argv = super().get_args()
+            if self.user_options.get('argv'):
+                argv.extend(self.user_options['argv'])
+            return argv
+    
+        def get_env(self):
+            env = super().get_env()
+            if self.user_options.get('env'):
+                env.update(self.user_options['env'])
+            return env
+    
+
+    c = get_config()
+    # c.JupyterHub.spawner_class='kubespawner.KubeSpawner'
+    c.JupyterHub.spawner_class = DemoFormSpawner
+    c.DemoFormSpawner.start_timeout=1000
 
     def calculate_user_image_from_choices(spawner):
+        spawner.user_options = spawner.options_from_form({'profile': [1]})
         print('USER OPTIONS: ', spawner.user_options)
         # return 'labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
         return 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
 
     # Which container to spawn
-    c.KubeSpawner.image_spec=calculate_user_image_from_choices(c.KubeSpawner)
-    c.KubeSpawner.default_url = '/lab'
-    c.KubeSpawner.uid = 1000 #uid 1000 corresponds to jovyan, uid 0 to root
-    c.KubeSpawner.cmd = ['jupyter-labhub']
-    c.KubeSpawner.working_dir = '/home/jovyan'
-    c.KubeSpawner.service_account='jupyteruser-sa'
+    c.DemoFormSpawner.image_spec=calculate_user_image_from_choices(c.DemoFormSpawner)
+    c.DemoFormSpawner.default_url = '/lab'
+    c.DemoFormSpawner.uid = 1000 #uid 1000 corresponds to jovyan, uid 0 to root
+    c.DemoFormSpawner.cmd = ['jupyter-labhub']
+    c.DemoFormSpawner.working_dir = '/home/jovyan'
+    c.DemoFormSpawner.service_account='jupyteruser-sa'
 
     # Give users options to choose the image
-    c.KubeSpawner.options_form = """
-    Set your key:
-        Choose language kernels and/or packages:
-        <br>
-        <input type="checkbox" id="option1" name="option1" value1="1">
-        <label for="option1"> Python Data Science</label><br>
-        <input type="checkbox" id="option2" name="option2" value2="2">
-        <label for="option2"> R</label><br>
-        <input type="checkbox" id="option3" name="option3" value3="3">
-        <label for="option3"> Julia</label><br><br>
+    # c.DemoFormSpawner.options_form = """
+    # Set your key:
+    #     Choose language kernels and/or packages:
+    #     <br>
+    #     <input type="checkbox" id="option1" name="option1" value1="1">
+    #     <label for="option1"> Python Data Science</label><br>
+    #     <input type="checkbox" id="option2" name="option2" value2="2">
+    #     <label for="option2"> R</label><br>
+    #     <input type="checkbox" id="option3" name="option3" value3="3">
+    #     <label for="option3"> Julia</label><br><br>
 
-    Choose an image letter:
-    <br>
+    # Choose an image letter:
+    # <br>
     
-    <select name="letter" multiple="true">
-        <option value="A">The letter A</option>
-        <option value="B">The letter B</option>
-    </select>
-    """
+    # <select name="letter" multiple="true">
+    #     <option value="A">The letter A</option>
+    #     <option value="B">The letter B</option>
+    # </select>
+    # """
 
     # images = [
     #     'labshare/polyglot-notebook:f78a3c0775b838a92c9045f62c81e20b651e8abdb7bd6ab061807b4ae607a5b2',
@@ -75,14 +124,14 @@ data:
     # c.KubeSpawner.profile_list = [{'display_name': label,'kubespawner_override': {'image': 'labshare/polyglot-notebook:'+image}} for image,label in zip(images, choice_labels)]
 
     # Per-user storage configuration
-    c.KubeSpawner.pvc_name_template = 'claim-{username}'
-    c.KubeSpawner.storage_class = 'rook-cephfs'
-    c.KubeSpawner.storage_capacity = 'STORAGE_PER_USER_VALUE'
-    c.KubeSpawner.storage_access_modes = ['ReadWriteOnce']
-    c.KubeSpawner.storage_pvc_ensure = True
+    c.DemoFormSpawner.pvc_name_template = 'claim-{username}'
+    c.DemoFormSpawner.storage_class = 'rook-cephfs'
+    c.DemoFormSpawner.storage_capacity = 'STORAGE_PER_USER_VALUE'
+    c.DemoFormSpawner.storage_access_modes = ['ReadWriteOnce']
+    c.DemoFormSpawner.storage_pvc_ensure = True
 
     # Volumes to attach to Pod
-    c.KubeSpawner.volumes = [
+    c.DemoFormSpawner.volumes = [
       {
         'name': 'volume-{username}',
         'persistentVolumeClaim': {
@@ -104,7 +153,7 @@ data:
     ]
 
     # Where to mount volumes
-    c.KubeSpawner.volume_mounts = [
+    c.DemoFormSpawner.volume_mounts = [
       {
         'mountPath': '/home/jovyan/work',
         'name': 'volume-{username}'
@@ -149,7 +198,7 @@ data:
     c.LocalGenericOAuthenticator.auto_login = True
 
     # Set up WIPP UI url for integration with WIPP
-    c.KubeSpawner.environment = {
+    c.DemoFormSpawner.environment = {
         'WIPP_UI_URL': 'WIPP_UI_VALUE',
         'WIPP_API_INTERNAL_URL': 'WIPP_API_INTERNAL_VALUE',
         'WIPP_NOTEBOOKS_PATH': 'WIPP_NOTEBOOKS_PATH_VALUE'
