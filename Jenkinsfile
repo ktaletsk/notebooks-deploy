@@ -153,7 +153,7 @@ pipeline {
                 configFileProvider([configFile(fileId: 'env-ci', targetLocation: '.env')]) {
                     withAWS(credentials:'aws-jenkins-eks') {
                         sh "aws --region ${AWS_REGION} eks update-kubeconfig --name ${KUBERNETES_CLUSTER_NAME}"
-                        sh "./deploy.sh"
+                        sh "bash deploy.sh"
                     }
                 }
             }
