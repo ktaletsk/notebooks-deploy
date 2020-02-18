@@ -15,7 +15,8 @@ data:
 
     def calculate_user_image_from_choices(spawner):
         print('USER OPTIONS: ', spawner.user_options)
-        return 'labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
+        # return 'labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
+        return 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
 
     # Which container to spawn
     c.KubeSpawner.image_spec=calculate_user_image_from_choices(c.KubeSpawner)
