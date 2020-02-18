@@ -9,7 +9,7 @@ data:
     from railyard.assembler import readStacks, get_hash
 
     def calculate_user_image_from_choices():
-        print('USER OPTIONS: ', c.KubeSpawner.user_options)
+        print('USER OPTIONS: ', self.user_options)
         return 'labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
 
     c = get_config()
