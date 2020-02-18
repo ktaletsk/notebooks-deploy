@@ -61,14 +61,14 @@ data:
     c.JupyterHub.spawner_class = DemoFormSpawner
     c.DemoFormSpawner.start_timeout=1000
 
-    def calculate_user_image_from_choices(spawner):
-        spawner.user_options = spawner.options_from_form({'profile': [1]})
-        print('USER OPTIONS: ', spawner.user_options)
-        # return 'labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
-        return 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
+    # def calculate_user_image_from_choices(spawner):
+    #     spawner.user_options = spawner.options_from_form({'profile': [1]})
+    #     print('USER OPTIONS: ', spawner.user_options)
+    #     # return 'labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
+    #     return 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
 
     # Which container to spawn
-    c.DemoFormSpawner.image_spec=calculate_user_image_from_choices(c.DemoFormSpawner)
+    c.DemoFormSpawner.image_spec=labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7
     c.DemoFormSpawner.default_url = '/lab'
     c.DemoFormSpawner.uid = 1000 #uid 1000 corresponds to jovyan, uid 0 to root
     c.DemoFormSpawner.cmd = ['jupyter-labhub']
