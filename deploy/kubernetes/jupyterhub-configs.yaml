@@ -41,7 +41,7 @@ data:
         'Bare minimum - Python',
         'Maximum - all kernels and packages included'
     ]
-    c.KubeSpawner.profile_list = [{'display_name': image,'kubespawner_override': {'image': label,}} for image,label in zip(images, image_labels)]
+    c.KubeSpawner.profile_list = [{'display_name': label,'kubespawner_override': {'image': image}} for image,label in zip(images, image_labels)]
 
     # Per-user storage configuration
     c.KubeSpawner.pvc_name_template = 'claim-{username}'
