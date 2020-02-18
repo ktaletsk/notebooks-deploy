@@ -21,44 +21,27 @@ data:
     c.KubeSpawner.service_account='jupyteruser-sa'
 
     # Give users options to choose the image
-    c.KubeSpawner.options_form = """
-    Set your key:
-        <br>
-        Choose language kernels and/or packages:
-        <select name="letter" multiple="true">
-          <option value="1">Python Data Science</option>
-          <option value="2">R</option>
-          <option value="3">Julia</option>
-          <option value="4">Octave</option>
-          <option value="5">Java+Scala</option>
-          <option value="6">C++</option>
-          <option value="7">Bash</option>
-          <option value="8">Deep Learning</option>
-        </select>
+    # c.KubeSpawner.options_form = """
+    # Set your key:
+    #     Choose language kernels and/or packages:
+    #     <br>
+    #     <input type="checkbox" id="option1" name="option1" value="1">
+    #     <label for="option1"> Python Data Science</label><br>
+    #     <input type="checkbox" id="option2" name="option2" value="2">
+    #     <label for="option2"> R</label><br>
+    #     <input type="checkbox" id="option3" name="option3" value="3">
+    #     <label for="option3"> Julia</label><br><br>
+    # """
 
-        <input type="checkbox" id="option1" name="option1" value2="1">
-        <label for="option1"> Python Data Science</label><br>
-        <input type="checkbox" id="option2" name="option2" value2="2">
-        <label for="option2"> R</label><br>
-        <input type="checkbox" id="option3" name="option3" value2="3">
-        <label for="option3"> Julia</label><br><br>
-    """
-
-    c.KubeSpawner.profile_list = [
-        {
-            'display_name': 'Bare minimum - Python',
-            'kubespawner_override': {
-                'image': 'labshare/polyglot-notebook:f78a3c0775b838a92c9045f62c81e20b651e8abdb7bd6ab061807b4ae607a5b2',
-            }
-        }, 
-        {
-            'display_name': 'Maximum - all kernels and packages included',
-            'default': True,
-            'kubespawner_override': {
-                'image': 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7',
-            }
-        }
+    images = [
+        'labshare/polyglot-notebook:f78a3c0775b838a92c9045f62c81e20b651e8abdb7bd6ab061807b4ae607a5b2',
+        'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
     ]
+    image_labels = [
+        'Bare minimum - Python',
+        'Maximum - all kernels and packages included'
+    ]
+    c.KubeSpawner.profile_list = [{'display_name': image,'kubespawner_override': {'image': label,}} for image,label in zip(images, image_labels)]
 
     # Per-user storage configuration
     c.KubeSpawner.pvc_name_template = 'claim-{username}'
