@@ -9,7 +9,7 @@ data:
     from railyard.assembler import readStacks, get_hash
 
     def calculate_user_image_from_choices():
-        print(c.KubeSpawner.user_options.get('value1', None))
+        print(c.KubeSpawner.options_from_form)
         return 'labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
 
     c = get_config()
@@ -36,6 +36,14 @@ data:
         <label for="option2"> R</label><br>
         <input type="checkbox" id="option3" name="option3" value3="3">
         <label for="option3"> Julia</label><br><br>
+
+    Choose an image letter:
+    <br>
+    
+    <select name="letter" multiple="true">
+        <option value="A">The letter A</option>
+        <option value="B">The letter B</option>
+    </select>
     """
 
     # images = [
