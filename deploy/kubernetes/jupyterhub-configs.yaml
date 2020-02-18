@@ -37,11 +37,11 @@ data:
         </select>
 
         <input type="checkbox" id="option1" name="option1" value2="1">
-        <label for="vehicle1"> Python Data Science</label><br>
+        <label for="option1"> Python Data Science</label><br>
         <input type="checkbox" id="option2" name="option2" value2="2">
-        <label for="vehicle2"> R</label><br>
+        <label for="option2"> R</label><br>
         <input type="checkbox" id="option3" name="option3" value2="3">
-        <label for="vehicle3"> Julia</label><br><br>
+        <label for="option3"> Julia</label><br><br>
     """
 
     c.KubeSpawner.profile_list = [
