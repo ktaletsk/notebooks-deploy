@@ -71,7 +71,7 @@ data:
         'Maximum - all kernels and packages included'
     ]
     images = [get_hash(readStacks(base, choice)) for choice in choices]
-    c.KubeSpawner.profile_list = [{'display_name': label,'kubespawner_override': {'image': 'labshare/polyglot-notebook:'+image}} for image,label in zip(images, choice_labels)]
+    # c.KubeSpawner.profile_list = [{'display_name': label,'kubespawner_override': {'image': 'labshare/polyglot-notebook:'+image}} for image,label in zip(images, choice_labels)]
 
     # Per-user storage configuration
     c.KubeSpawner.pvc_name_template = 'claim-{username}'
