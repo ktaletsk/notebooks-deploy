@@ -150,9 +150,11 @@ pipeline {
         stage('Deploy JupyterHub to Kubernetes') {
             steps {
                 // Config JSON file is stored in Jenkins and should contain sensitive environment values.                
-                withAWS(credentials:'aws-jenkins-eks') {
-                    sh "aws --region ${AWS_REGION} eks update-kubeconfig --name ${KUBERNETES_CLUSTER_NAME}"
-                    sh "./deploy.sh"
+                configFileProvider([configFile(fileId: 'env-ci', targetLocation: '.env')]) {
+                    withAWS(credentials:'aws-jenkins-eks') {
+                        sh "aws --region ${AWS_REGION} eks update-kubeconfig --name ${KUBERNETES_CLUSTER_NAME}"
+                        sh "./deploy.sh"
+                    }
                 }
             }
         }
