@@ -46,7 +46,7 @@ data:
         [
             'railyard/stacks/Python-datascience.yaml',
             'railyard/stacks/Python-dataviz.yaml',
-            'railyard/stacks/R.yaml' 
+            'railyard/stacks/R.yaml',
             'railyard/stacks/java.yaml' 
             'railyard/stacks/scala.yaml',
             'railyard/stacks/cpp.yaml',
