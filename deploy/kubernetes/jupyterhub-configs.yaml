@@ -8,17 +8,17 @@ data:
     from oauthenticator.generic import LocalGenericOAuthenticator
     from railyard.assembler import readStacks, get_hash
 
-    def calculate_user_image_from_choices():
-        print('USER OPTIONS: ', self.user_options)
-        return 'labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
-
     c = get_config()
 
     c.JupyterHub.spawner_class='kubespawner.KubeSpawner'
     c.KubeSpawner.start_timeout=1000
 
+    def calculate_user_image_from_choices(spawner):
+        print('USER OPTIONS: ', spawner.user_options)
+        return 'labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
+
     # Which container to spawn
-    c.KubeSpawner.image_spec=calculate_user_image_from_choices()
+    c.KubeSpawner.image_spec=calculate_user_image_from_choices(c.KubeSpawner)
     c.KubeSpawner.default_url = '/lab'
     c.KubeSpawner.uid = 1000 #uid 1000 corresponds to jovyan, uid 0 to root
     c.KubeSpawner.cmd = ['jupyter-labhub']
