@@ -47,7 +47,7 @@ data:
             '/srv/jupyterhub/railyard/stacks/Python-datascience.yaml',
             '/srv/jupyterhub/railyard/stacks/Python-dataviz.yaml',
             '/srv/jupyterhub/railyard/stacks/R.yaml',
-            '/srv/jupyterhub/railyard/stacks/java.yaml' 
+            '/srv/jupyterhub/railyard/stacks/java.yaml',
             '/srv/jupyterhub/railyard/stacks/scala.yaml',
             '/srv/jupyterhub/railyard/stacks/cpp.yaml',
             '/srv/jupyterhub/railyard/stacks/julia.yaml',
