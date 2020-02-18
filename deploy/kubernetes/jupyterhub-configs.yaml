@@ -40,19 +40,19 @@ data:
     # ]
 
     # Generate image hashes using railyard
-    base = 'railyard/stacks/base.yaml'
+    base = '/srv/jupyterhub/railyard/stacks/base.yaml'
     choices = [
         [],
         [
-            'railyard/stacks/Python-datascience.yaml',
-            'railyard/stacks/Python-dataviz.yaml',
-            'railyard/stacks/R.yaml',
-            'railyard/stacks/java.yaml' 
-            'railyard/stacks/scala.yaml',
-            'railyard/stacks/cpp.yaml',
-            'railyard/stacks/julia.yaml',
-            'railyard/stacks/octave.yaml',
-            'railyard/stacks/bash.yaml']
+            '/srv/jupyterhub/railyard/stacks/Python-datascience.yaml',
+            '/srv/jupyterhub/railyard/stacks/Python-dataviz.yaml',
+            '/srv/jupyterhub/railyard/stacks/R.yaml',
+            '/srv/jupyterhub/railyard/stacks/java.yaml' 
+            '/srv/jupyterhub/railyard/stacks/scala.yaml',
+            '/srv/jupyterhub/railyard/stacks/cpp.yaml',
+            '/srv/jupyterhub/railyard/stacks/julia.yaml',
+            '/srv/jupyterhub/railyard/stacks/octave.yaml',
+            '/srv/jupyterhub/railyard/stacks/bash.yaml']
     ]
     choice_labels = [
         'Bare minimum - Python',
