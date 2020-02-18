@@ -23,13 +23,25 @@ data:
     # Give users options to choose the image
     c.KubeSpawner.options_form = """
     Set your key:
-        <input name="key" val="default_key"></input>
         <br>
-        Choose a letter:
+        Choose language kernels and/or packages:
         <select name="letter" multiple="true">
-          <option value="A">The letter A</option>
-          <option value="B">The letter B</option>
+          <option value="1">Python Data Science</option>
+          <option value="2">R</option>
+          <option value="3">Julia</option>
+          <option value="4">Octave</option>
+          <option value="5">Java+Scala</option>
+          <option value="6">C++</option>
+          <option value="7">Bash</option>
+          <option value="8">Deep Learning</option>
         </select>
+
+        <input type="checkbox" id="option1" name="option1" value2="1">
+        <label for="vehicle1"> Python Data Science</label><br>
+        <input type="checkbox" id="option2" name="option2" value2="2">
+        <label for="vehicle2"> R</label><br>
+        <input type="checkbox" id="option3" name="option3" value2="3">
+        <label for="vehicle3"> Julia</label><br><br>
     """
 
     c.KubeSpawner.profile_list = [
