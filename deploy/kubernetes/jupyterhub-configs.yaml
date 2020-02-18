@@ -8,6 +8,8 @@ data:
     from oauthenticator.generic import LocalGenericOAuthenticator
     from railyard.assembler import readStacks, get_hash
 
+    from kubespawner import KubeSpawner
+
     class DemoFormSpawner(KubeSpawner):
         def _options_form_default(self):
             default_env = "YOURNAME=%s\n" % self.user.name
