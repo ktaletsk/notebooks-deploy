@@ -47,7 +47,7 @@ data:
                 '/srv/jupyterhub/railyard/stacks/R.yaml',
                 '/srv/jupyterhub/railyard/stacks/julia.yaml'
             ]
-            options = [formdata.get(option, None) for option in options]
+            options = [True if formdata.get(option, None) else False for option in options]
             # image = 'labshare/polyglot-notebook:' + get_hash(readStacks(base, choice))
             self.log.debug("FORMDATA: %s. Chosen image: %s. Options: %s", formdata, image, str(options))
             return dict(profile={'display_name': 'Chosen image', 'default': True, 'kubespawner_override': {'image': image,}})
