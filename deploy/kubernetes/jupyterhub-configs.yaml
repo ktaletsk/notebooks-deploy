@@ -12,45 +12,19 @@ data:
 
     class DemoFormSpawner(KubeSpawner):
         def _options_form_default(self):
-            default_env = "YOURNAME=%s\n" % self.user.name
+            default_image = 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
             return """
             <div class="form-group">
-                <label for="args">Extra notebook CLI arguments</label>
-                <input name="args" class="form-control"
-                    placeholder="e.g. --debug"></input>
-            </div>
-            <div class="form-group">
-                <label for="env">Environment variables (one per line)</label>
-                <textarea class="form-control" name="env">{env}</textarea>
-            </div>
-            <div class="form-group">
-                <label for="image">Image tag</label>
-                <textarea class="form-control" name="image">{env}</textarea>
+                <label for="image">Choose image tom spawn</label>
+                <textarea class="form-control" name="image">{image}</textarea>
             </div>
             """.format(
-                env=default_env
+                image=default_image
             )
     
         def options_from_form(self, formdata):
-            options = {}
-            options['env'] = env = {}
-
-            print(formdata)
-    
-            env_lines = formdata.get('env', [''])
-            for line in env_lines[0].splitlines():
-                if line:
-                    key, value = line.split('=', 1)
-                    env[key.strip()] = value.strip()
-    
-            arg_s = formdata.get('args', [''])[0].strip()
-            if arg_s:
-                options['argv'] = shlex.split(arg_s)
-
             image = formdata.get('image', [''])[0].strip()
-            if image:
-                options['image'] = image
-            return options
+            return dict(profile={'display_name': 'Chosen image', 'default': True, 'kubespawner_override': {'image': image,}})
     
         def get_args(self):
             """Return arguments to pass to the notebook server"""
@@ -65,11 +39,6 @@ data:
                 env.update(self.user_options['env'])
             return env
 
-        def get_image(self):
-            # image = 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
-            image = self.user_options.get('image')
-            return image
-
     c = get_config()
     # c.JupyterHub.spawner_class='kubespawner.KubeSpawner'
     c.JupyterHub.spawner_class = DemoFormSpawner
@@ -82,7 +51,7 @@ data:
     #     return 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
 
     # Which container to spawn
-    c.DemoFormSpawner.image_spec=c.DemoFormSpawner.get_image()
+    c.DemoFormSpawner.image_spec='labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
     c.DemoFormSpawner.default_url = '/lab'
     c.DemoFormSpawner.uid = 1000 #uid 1000 corresponds to jovyan, uid 0 to root
     c.DemoFormSpawner.cmd = ['jupyter-labhub']
