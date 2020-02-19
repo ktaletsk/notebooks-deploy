@@ -50,6 +50,7 @@ data:
             options = [True if formdata.get(option, None) else False for option in options]
             image = 'labshare/polyglot-notebook:' + get_hash(readStacks(base, [stack for stack,included in zip(stacks,options) if included]))
             self.log.debug("FORMDATA: %s. Chosen image: %s.", formdata, image)
+            setattr(self, 'image', image)
             return dict(profile={'display_name': 'Chosen image', 'default': True, 'kubespawner_override': {'image': image,}})
     
         def get_args(self):
