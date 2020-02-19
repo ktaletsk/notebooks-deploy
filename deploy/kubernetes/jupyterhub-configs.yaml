@@ -18,6 +18,17 @@ data:
                 <label for="image">Choose image tom spawn</label>
                 <textarea class="form-control" name="image">{img}</textarea>
             </div>
+            <div class="form-group">
+                Choose language kernels and packages
+                <br>
+                <input type="checkbox" id="option1" name="option1" value1="1">
+                <label for="option1"> Python Data Science</label><br>
+                <input type="checkbox" id="option2" name="option2" value2="2">
+                <label for="option2"> R</label><br>
+                <input type="checkbox" id="option3" name="option3" value3="3">
+                <label for="option3"> Julia</label><br><br>
+            </div>
+            Choose language kernels and/or packages:
             """.format(
                 img=default_image
             )
