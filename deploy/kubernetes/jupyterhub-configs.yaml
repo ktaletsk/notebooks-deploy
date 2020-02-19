@@ -23,11 +23,11 @@ data:
             )
     
         def options_from_form(self, formdata):
+            image = formdata.get('image', [''])[0].strip()
             if formdata:
-                self.log.debug("FORM INPUTS:", formdata)
+                self.log.debug("FORM INPUTS:", formdata, image)
             else:
                 self.log.debug("formdata not found")
-            image = formdata.get('image', [''])[0].strip()
             return dict(profile={'display_name': 'Chosen image', 'default': True, 'kubespawner_override': {'image': image,}})
     
         def get_args(self):
