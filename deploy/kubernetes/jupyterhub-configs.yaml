@@ -5,6 +5,7 @@ metadata:
 data:
   jupyterhub-config.py: |
     import os,sys,subprocess
+    import requests
     from oauthenticator.generic import LocalGenericOAuthenticator
     from railyard.assembler import readStacks, get_hash
 
@@ -40,10 +41,11 @@ data:
                 '/srv/jupyterhub/railyard/stacks/julia.yaml'
             ]
             options = [True if formdata.get(option, None) else False for option in options]
-            image = 'labshare/polyglot-notebook:' + get_hash(readStacks(base, [stack for stack,included in zip(stacks,options) if included]))
+            tag = get_hash(readStacks(base, [stack for stack,included in zip(stacks,options) if included]))
+            image = 'labshare/polyglot-notebook:' + tag
 
             #Check if image exist to avoid PullErrors
-            if subprocess.run(['docker', 'manifest', 'inspect', image],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode != 0:
+            if requests.get('https://hub.docker.com/v2/repositories/labshare/polyglot-notebook/tags/' + tag).status_code != 200:
                 self.log.debug("Requested image %s is not in registry, using default image", image)
                 image = 'labshare/polyglot-notebook:' + get_hash(readStacks(base, stacks))
                 
