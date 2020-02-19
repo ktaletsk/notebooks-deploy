@@ -16,15 +16,15 @@ data:
             return """
             <div class="form-group">
                 <label for="image">Choose image tom spawn</label>
-                <textarea class="form-control" name="image">{image}</textarea>
+                <textarea class="form-control" name="image">{img}</textarea>
             </div>
             """.format(
-                image=default_image
+                img=default_image
             )
     
         def options_from_form(self, formdata):
-            image = str(formdata.get('image'))
-            self.log.debug("CHOSEN IMAGE:", image)
+            image = formdata.get('image')
+            self.log.debug("FORMDATA: %s. Chosen image: %s", formdata, image)
             return dict(profile={'display_name': 'Chosen image', 'default': True, 'kubespawner_override': {'image': image,}})
     
         def get_args(self):
