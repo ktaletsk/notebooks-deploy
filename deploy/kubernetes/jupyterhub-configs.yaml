@@ -24,12 +24,8 @@ data:
                 <textarea class="form-control" name="env">{env}</textarea>
             </div>
             <div class="form-group">
-                <label for="image">Choose kernels and packages</label>
-                <br>
-                <select name="image" multiple="true">
-                    <option value="A">The letter A</option>
-                    <option value="B">The letter B</option>
-                </select>
+                <label for="image">Image tag</label>
+                <textarea class="form-control" name="image">{env}</textarea>
             </div>
             """.format(
                 env=default_env
@@ -50,6 +46,10 @@ data:
             arg_s = formdata.get('args', [''])[0].strip()
             if arg_s:
                 options['argv'] = shlex.split(arg_s)
+
+            image = formdata.get('image', [''])[0].strip()
+            if image:
+                options['image'] = image
             return options
     
         def get_args(self):
@@ -64,7 +64,11 @@ data:
             if self.user_options.get('env'):
                 env.update(self.user_options['env'])
             return env
-    
+
+        def.get_image(self):
+            # image = 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
+            image = self.user_options.get('image')
+            return image
 
     c = get_config()
     # c.JupyterHub.spawner_class='kubespawner.KubeSpawner'
@@ -78,7 +82,7 @@ data:
     #     return 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
 
     # Which container to spawn
-    c.DemoFormSpawner.image_spec='labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
+    c.DemoFormSpawner.image_spec=c.DemoFormSpawner.get_image()
     c.DemoFormSpawner.default_url = '/lab'
     c.DemoFormSpawner.uid = 1000 #uid 1000 corresponds to jovyan, uid 0 to root
     c.DemoFormSpawner.cmd = ['jupyter-labhub']
