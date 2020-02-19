@@ -12,12 +12,7 @@ data:
 
     class DemoFormSpawner(KubeSpawner):
         def _options_form_default(self):
-            default_image = 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
             return """
-            <div class="form-group">
-                <label for="image">Choose image tom spawn</label>
-                <textarea class="form-control" name="image">{img}</textarea>
-            </div>
             <div class="form-group">
                 Choose language kernels and packages
                 <br>
@@ -29,9 +24,7 @@ data:
                 <label for="option3"> Julia</label><br><br>
             </div>
             Choose language kernels and/or packages:
-            """.format(
-                img=default_image
-            )
+            """
     
         def options_from_form(self, formdata):
             # image = formdata.get('image')
@@ -52,67 +45,18 @@ data:
             self.log.debug("FORMDATA: %s. Chosen image: %s.", formdata, image)
             setattr(self, 'image', image)
             return dict(profile={'display_name': 'Chosen image', 'default': True, 'kubespawner_override': {'image': image,}})
-    
-        def get_args(self):
-            """Return arguments to pass to the notebook server"""
-            argv = super().get_args()
-            if self.user_options.get('argv'):
-                argv.extend(self.user_options['argv'])
-            return argv
-    
-        def get_env(self):
-            env = super().get_env()
-            if self.user_options.get('env'):
-                env.update(self.user_options['env'])
-            return env
 
     c = get_config()
     # c.JupyterHub.spawner_class='kubespawner.KubeSpawner'
     c.JupyterHub.spawner_class = DemoFormSpawner
     c.DemoFormSpawner.start_timeout=1000
 
-    # def calculate_user_image_from_choices(spawner):
-    #     spawner.user_options = spawner.options_from_form({'profile': [1]})
-    #     print('USER OPTIONS: ', spawner.user_options)
-    #     # return 'labshare/polyglot-notebook:NOTEBOOK_VERSION_VALUE'
-    #     return 'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
-
     # Which container to spawn
-    c.DemoFormSpawner.image='labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
     c.DemoFormSpawner.default_url = '/lab'
     c.DemoFormSpawner.uid = 1000 #uid 1000 corresponds to jovyan, uid 0 to root
     c.DemoFormSpawner.cmd = ['jupyter-labhub']
     c.DemoFormSpawner.working_dir = '/home/jovyan'
     c.DemoFormSpawner.service_account='jupyteruser-sa'
-
-    # Give users options to choose the image
-    # c.DemoFormSpawner.options_form = """
-    # Set your key:
-    #     Choose language kernels and/or packages:
-    #     <br>
-    #     <input type="checkbox" id="option1" name="option1" value1="1">
-    #     <label for="option1"> Python Data Science</label><br>
-    #     <input type="checkbox" id="option2" name="option2" value2="2">
-    #     <label for="option2"> R</label><br>
-    #     <input type="checkbox" id="option3" name="option3" value3="3">
-    #     <label for="option3"> Julia</label><br><br>
-
-    # Choose an image letter:
-    # <br>
-    
-    # <select name="letter" multiple="true">
-    #     <option value="A">The letter A</option>
-    #     <option value="B">The letter B</option>
-    # </select>
-    # """
-
-    # images = [
-    #     'labshare/polyglot-notebook:f78a3c0775b838a92c9045f62c81e20b651e8abdb7bd6ab061807b4ae607a5b2',
-    #     'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
-    # ]
-
-    
-    # c.KubeSpawner.profile_list = [{'display_name': label,'kubespawner_override': {'image': 'labshare/polyglot-notebook:'+image}} for image,label in zip(images, choice_labels)]
 
     # Per-user storage configuration
     c.DemoFormSpawner.pvc_name_template = 'claim-{username}'
