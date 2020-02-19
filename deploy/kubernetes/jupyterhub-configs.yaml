@@ -17,12 +17,22 @@ data:
             <div class="form-group">
                 Choose language kernels and/or packages:
                 <br>
-                <input type="checkbox" id="option1" name="option1" value1="1">
+                <input type="checkbox" id="option1" name="option1">
                 <label for="option1"> Python Data Science</label><br>
-                <input type="checkbox" id="option2" name="option2" value2="2">
+                <input type="checkbox" id="option2" name="option2">
                 <label for="option2"> R</label><br>
-                <input type="checkbox" id="option3" name="option3" value3="3">
+                <input type="checkbox" id="option3" name="option3">
                 <label for="option3"> Julia</label><br><br>
+                <input type="checkbox" id="option4" name="option4">
+                <label for="option3"> Octave</label><br><br>
+                <input type="checkbox" id="option5" name="option5">
+                <label for="option5"> Java+Scala</label><br><br>
+                <input type="checkbox" id="option6" name="option6">
+                <label for="option6"> C++</label><br><br>
+                <input type="checkbox" id="option7" name="option7">
+                <label for="option7"> Bash</label><br><br>
+                <input type="checkbox" id="option8" name="option8">
+                <label for="option8"> Python Deep Learning</label><br><br>
             </div>
             """
     
@@ -32,22 +42,34 @@ data:
             options = [
                 'option1',
                 'option2',
-                'option3'
+                'option3',
+                'option4',
+                'option5',
+                'option6',
+                'option7',
+                'option8'
             ]
             base = '/srv/jupyterhub/railyard/stacks/base.yaml'
             stacks = [
-                '/srv/jupyterhub/railyard/stacks/Python-datascience.yaml',
-                '/srv/jupyterhub/railyard/stacks/R.yaml',
-                '/srv/jupyterhub/railyard/stacks/julia.yaml'
+                ['/srv/jupyterhub/railyard/stacks/Python-datascience.yaml', '/srv/jupyterhub/railyard/stacks/Python-dataviz.yaml'],
+                ['/srv/jupyterhub/railyard/stacks/R.yaml'],
+                ['/srv/jupyterhub/railyard/stacks/julia.yaml'],
+                ['/srv/jupyterhub/railyard/stacks/octave.yaml'],
+                ['/srv/jupyterhub/railyard/stacks/java.yaml', '/srv/jupyterhub/railyard/stacks/scala.yaml'],
+                ['/srv/jupyterhub/railyard/stacks/cpp.yaml'],
+                ['/srv/jupyterhub/railyard/stacks/bash.yaml'],
+                ['/srv/jupyterhub/railyard/stacks/tensorflow.yaml', '/srv/jupyterhub/railyard/stacks/pytorch.yaml', '/srv/jupyterhub/railyard/stack/fastai.yaml']
             ]
             options = [True if formdata.get(option, None) else False for option in options]
-            tag = get_hash(readStacks(base, [stack for stack,included in zip(stacks,options) if included]))
+            tag = get_hash(readStacks(base, [item for stack,included in zip(stacks,options) for item in stack if included]))
             image = 'labshare/polyglot-notebook:' + tag
 
             #Check if image exist to avoid PullErrors
             if requests.get('https://hub.docker.com/v2/repositories/labshare/polyglot-notebook/tags/' + tag).status_code != 200:
                 self.log.debug("Requested image %s is not in registry, using default image", image)
-                image = 'labshare/polyglot-notebook:' + get_hash(readStacks(base, stacks))
+                options = [True] * len(stacks)
+                tag = get_hash(readStacks(base, [item for stack,included in zip(stacks,options) for item in stack if included]))
+                image = 'labshare/polyglot-notebook:' + tag
                 
             setattr(self, 'image', image)
             return dict(profile={'display_name': 'Chosen image', 'default': True, 'kubespawner_override': {'image': image,}})
