@@ -20,19 +20,19 @@ data:
                 <input type="checkbox" id="option1" name="option1">
                 <label for="option1"> Python Data Science</label><br>
                 <input type="checkbox" id="option2" name="option2">
-                <label for="option2"> R</label><br>
+                <label for="option2"> R</label>
                 <input type="checkbox" id="option3" name="option3">
                 <label for="option3"> Julia</label><br><br>
                 <input type="checkbox" id="option4" name="option4">
-                <label for="option3"> Octave</label><br><br>
+                <label for="option3"> Octave</label><br>
                 <input type="checkbox" id="option5" name="option5">
-                <label for="option5"> Java+Scala</label><br><br>
+                <label for="option5"> Java+Scala</label><br>
                 <input type="checkbox" id="option6" name="option6">
-                <label for="option6"> C++</label><br><br>
+                <label for="option6"> C++</label><br>
                 <input type="checkbox" id="option7" name="option7">
-                <label for="option7"> Bash</label><br><br>
+                <label for="option7"> Bash</label><br>
                 <input type="checkbox" id="option8" name="option8">
-                <label for="option8"> Python Deep Learning</label><br><br>
+                <label for="option8"> Python Deep Learning</label><br>
             </div>
             """
     
