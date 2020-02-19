@@ -25,6 +25,7 @@ data:
             </div>
             <div class="form-group">
                 <label for="image">Choose kernels and packages</label>
+                <br>
                 <select name="image" multiple="true">
                     <option value="A">The letter A</option>
                     <option value="B">The letter B</option>
@@ -37,6 +38,8 @@ data:
         def options_from_form(self, formdata):
             options = {}
             options['env'] = env = {}
+
+            print(formdata)
     
             env_lines = formdata.get('env', [''])
             for line in env_lines[0].splitlines():
