@@ -34,7 +34,7 @@ data:
             )
     
         def options_from_form(self, formdata):
-            image = formdata.get('image')
+            # image = formdata.get('image')
             # Decode user choices
             options = [
                 'option1',
@@ -48,8 +48,8 @@ data:
                 '/srv/jupyterhub/railyard/stacks/julia.yaml'
             ]
             options = [True if formdata.get(option, None) else False for option in options]
-            # image = 'labshare/polyglot-notebook:' + get_hash(readStacks(base, choice))
-            self.log.debug("FORMDATA: %s. Chosen image: %s. Options: %s", formdata, image, str(options))
+            image = 'labshare/polyglot-notebook:' + get_hash(readStacks(base, [stack for el,c in zip(stacks,options) if c]))
+            self.log.debug("FORMDATA: %s. Chosen image: %s.", formdata, image)
             return dict(profile={'display_name': 'Chosen image', 'default': True, 'kubespawner_override': {'image': image,}})
     
         def get_args(self):
