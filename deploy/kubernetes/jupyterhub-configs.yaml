@@ -35,7 +35,21 @@ data:
     
         def options_from_form(self, formdata):
             image = formdata.get('image')
-            self.log.debug("FORMDATA: %s. Chosen image: %s", formdata, image)
+            # Decode user choices
+            options = [
+                'option1',
+                'option2',
+                'option3'
+            ]
+            base = '/srv/jupyterhub/railyard/stacks/base.yaml'
+            stacks = [
+                '/srv/jupyterhub/railyard/stacks/Python-datascience.yaml',
+                '/srv/jupyterhub/railyard/stacks/R.yaml',
+                '/srv/jupyterhub/railyard/stacks/julia.yaml'
+            ]
+            options = [formdata.get(option, None) for option in options]
+            # image = 'labshare/polyglot-notebook:' + get_hash(readStacks(base, choice))
+            self.log.debug("FORMDATA: %s. Chosen image: %s. Options: %s", formdata, image, str(options))
             return dict(profile={'display_name': 'Chosen image', 'default': True, 'kubespawner_override': {'image': image,}})
     
         def get_args(self):
@@ -96,26 +110,7 @@ data:
     #     'labshare/polyglot-notebook:8f3b6c44d18c50a42b14b1d510b8cb555a6d746348e3c23d02d5216d66b995d7'
     # ]
 
-    # Generate image hashes using railyard
-    base = '/srv/jupyterhub/railyard/stacks/base.yaml'
-    choices = [
-        [],
-        [
-            '/srv/jupyterhub/railyard/stacks/Python-datascience.yaml',
-            '/srv/jupyterhub/railyard/stacks/Python-dataviz.yaml',
-            '/srv/jupyterhub/railyard/stacks/R.yaml',
-            '/srv/jupyterhub/railyard/stacks/java.yaml',
-            '/srv/jupyterhub/railyard/stacks/scala.yaml',
-            '/srv/jupyterhub/railyard/stacks/cpp.yaml',
-            '/srv/jupyterhub/railyard/stacks/julia.yaml',
-            '/srv/jupyterhub/railyard/stacks/octave.yaml',
-            '/srv/jupyterhub/railyard/stacks/bash.yaml']
-    ]
-    choice_labels = [
-        'Bare minimum - Python',
-        'Maximum - all kernels and packages included'
-    ]
-    images = [get_hash(readStacks(base, choice)) for choice in choices]
+    
     # c.KubeSpawner.profile_list = [{'display_name': label,'kubespawner_override': {'image': 'labshare/polyglot-notebook:'+image}} for image,label in zip(images, choice_labels)]
 
     # Per-user storage configuration
