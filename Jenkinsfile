@@ -82,6 +82,10 @@ pipeline {
                             sh "pip install -r requirements.txt --user"
                             sh 'pip install . --user'
                             sh '$HOME/.local/bin/railyard assemble stacks/base.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/R.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/julia.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/R.yaml stacks/julia.yaml manifests'
                             sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/R.yaml stacks/java.yaml stacks/scala.yaml stacks/cpp.yaml stacks/julia.yaml stacks/octave.yaml stacks/bash.yaml manifests'
                             sh '$HOME/.local/bin/railyard assemble stacks/base_gpu.yaml manifests'
                             sh '$HOME/.local/bin/railyard assemble stacks/base_gpu.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/R.yaml stacks/java.yaml stacks/scala.yaml stacks/cpp.yaml stacks/julia.yaml stacks/octave.yaml stacks/bash.yaml stacks/pytorch.yaml stacks/fastai.yaml stacks/tensorflow.yaml manifests'
