@@ -4,7 +4,7 @@ metadata:
   name: jupyterhub-config
 data:
   jupyterhub-config.py: |
-    import os,sys
+    import os,sys,subprocess
     from oauthenticator.generic import LocalGenericOAuthenticator
     from railyard.assembler import readStacks, get_hash
 
@@ -14,7 +14,7 @@ data:
         def _options_form_default(self):
             return """
             <div class="form-group">
-                Choose language kernels and packages
+                Choose language kernels and/or packages:
                 <br>
                 <input type="checkbox" id="option1" name="option1" value1="1">
                 <label for="option1"> Python Data Science</label><br>
@@ -23,7 +23,6 @@ data:
                 <input type="checkbox" id="option3" name="option3" value3="3">
                 <label for="option3"> Julia</label><br><br>
             </div>
-            Choose language kernels and/or packages:
             """
     
         def options_from_form(self, formdata):
@@ -42,7 +41,12 @@ data:
             ]
             options = [True if formdata.get(option, None) else False for option in options]
             image = 'labshare/polyglot-notebook:' + get_hash(readStacks(base, [stack for stack,included in zip(stacks,options) if included]))
-            self.log.debug("FORMDATA: %s. Chosen image: %s.", formdata, image)
+
+            #Check if image exist to avoid PullErrors
+            if subprocess.run(['docker', 'manifest', 'inspect', image],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode != 0:
+                self.log.debug("Requested image %s is not in registry, using default image", image)
+                image = 'labshare/polyglot-notebook:' + get_hash(readStacks(base, stacks))
+                
             setattr(self, 'image', image)
             return dict(profile={'display_name': 'Chosen image', 'default': True, 'kubespawner_override': {'image': image,}})
 
