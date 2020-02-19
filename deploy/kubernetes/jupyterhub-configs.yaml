@@ -20,7 +20,7 @@ data:
                 <input type="checkbox" id="option1" name="option1">
                 <label for="option1"> Python Data Science</label><br>
                 <input type="checkbox" id="option2" name="option2">
-                <label for="option2"> R</label>
+                <label for="option2"> R</label><br>
                 <input type="checkbox" id="option3" name="option3">
                 <label for="option3"> Julia</label><br><br>
                 <input type="checkbox" id="option4" name="option4">
