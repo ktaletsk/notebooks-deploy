@@ -23,6 +23,13 @@ data:
                 <label for="env">Environment variables (one per line)</label>
                 <textarea class="form-control" name="env">{env}</textarea>
             </div>
+            <div class="form-group">
+                <label for="image">Choose kernels and packages</label>
+                <select name="image" multiple="true">
+                    <option value="A">The letter A</option>
+                    <option value="B">The letter B</option>
+                </select>
+            </div>
             """.format(
                 env=default_env
             )
