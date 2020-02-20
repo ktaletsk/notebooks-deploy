@@ -195,4 +195,12 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            script {
+                cleanWs()
+                sh 'docker system prune -a'
+            }
+        }
+    }
 }
