@@ -58,7 +58,7 @@ data:
                 ['/srv/jupyterhub/railyard/stacks/java.yaml', '/srv/jupyterhub/railyard/stacks/scala.yaml'],
                 ['/srv/jupyterhub/railyard/stacks/cpp.yaml'],
                 ['/srv/jupyterhub/railyard/stacks/bash.yaml'],
-                ['/srv/jupyterhub/railyard/stacks/tensorflow.yaml', '/srv/jupyterhub/railyard/stacks/pytorch.yaml', '/srv/jupyterhub/railyard/stack/fastai.yaml']
+                ['/srv/jupyterhub/railyard/stacks/tensorflow.yaml', '/srv/jupyterhub/railyard/stacks/pytorch.yaml', '/srv/jupyterhub/railyard/stacks/fastai.yaml']
             ]
             options = [True if formdata.get(option, None) else False for option in options]
             tag = get_hash(readStacks(base, [item for stack,included in zip(stacks,options) for item in stack if included]))
