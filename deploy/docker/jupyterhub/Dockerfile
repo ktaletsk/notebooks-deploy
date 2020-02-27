@@ -1,19 +1,13 @@
-FROM jupyterhub/jupyterhub:1.1.0
+FROM jupyterhub/jupyterhub:1.0.0
 
 # Track semantic versioning
 COPY VERSION /
-COPY railyard railyard
-
 
 # Install dockerspawner, oauth, postgres
-RUN apt-get update && \
-    apt-get install -yq --no-install-recommends git && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    python3 -m pip install --no-cache \
-        psycopg2==2.8.4 \
+RUN /opt/conda/bin/conda install -yq psycopg2=2.7 && \
+    /opt/conda/bin/conda clean -tipsy && \
+    /opt/conda/bin/pip install --no-cache-dir \
         git+https://github.com/labshare/oauthenticator.git \
-        jupyterhub-kubespawner==0.11.1 \
-        ./railyard
+        jupyterhub-kubespawner==0.11.1
 
 CMD ["jupyterhub", "-f", "/srv/jupyterhub/jupyterhub_config.py"]
