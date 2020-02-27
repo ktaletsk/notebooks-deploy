@@ -68,6 +68,9 @@ pipeline {
             }
         }
         stage('Assemble Jupyter Notebook Docker files') {
+            when {
+                environment name: 'SKIP_BUILD', value: 'false'
+            }
             agent {
                 docker {
                     image 'python:3.7'
