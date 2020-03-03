@@ -49,16 +49,16 @@ data:
                 'option7',
                 'option8'
             ]
-            base = '/srv/jupyterhub/railyard/stacks/base.yaml'
+            base = '/srv/jupyterhub/stacks/base.yaml'
             stacks = [
-                ['/srv/jupyterhub/railyard/stacks/Python-datascience.yaml', '/srv/jupyterhub/railyard/stacks/Python-dataviz.yaml'],
-                ['/srv/jupyterhub/railyard/stacks/R.yaml'],
-                ['/srv/jupyterhub/railyard/stacks/julia.yaml'],
-                ['/srv/jupyterhub/railyard/stacks/octave.yaml'],
-                ['/srv/jupyterhub/railyard/stacks/java.yaml', '/srv/jupyterhub/railyard/stacks/scala.yaml'],
-                ['/srv/jupyterhub/railyard/stacks/cpp.yaml'],
-                ['/srv/jupyterhub/railyard/stacks/bash.yaml'],
-                ['/srv/jupyterhub/railyard/stacks/tensorflow.yaml', '/srv/jupyterhub/railyard/stacks/pytorch.yaml', '/srv/jupyterhub/railyard/stacks/fastai.yaml']
+                ['/srv/jupyterhub/stacks/Python-datascience.yaml', '/srv/jupyterhub/stacks/Python-dataviz.yaml'],
+                ['/srv/jupyterhub/stacks/R.yaml'],
+                ['/srv/jupyterhub/stacks/julia.yaml'],
+                ['/srv/jupyterhub/stacks/octave.yaml'],
+                ['/srv/jupyterhub/stacks/java.yaml', '/srv/jupyterhub/stacks/scala.yaml'],
+                ['/srv/jupyterhub/stacks/cpp.yaml'],
+                ['/srv/jupyterhub/stacks/bash.yaml'],
+                ['/srv/jupyterhub/stacks/tensorflow.yaml', '/srv/jupyterhub/stacks/pytorch.yaml', '/srv/jupyterhub/stacks/fastai.yaml']
             ]
             options = [True if formdata.get(option, None) else False for option in options]
             tag = get_hash(readStacks(base, [item for stack,included in zip(stacks,options) for item in stack if included]))
