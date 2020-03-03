@@ -80,50 +80,49 @@ pipeline {
             }
             steps {
                 script {
-                    dir('deploy/tools/railyard') {
+                    dir('deploy/docker/notebook/stacks') {
                         withEnv(["HOME=${env.WORKSPACE}"]) {
-                            sh "pip install -r requirements.txt --user"
-                            sh 'pip install . --user'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/R.yaml stacks/julia.yaml stacks/octave.yaml stacks/java.yaml stacks/scala.yaml stacks/cpp.yaml stacks/bash.yaml stacks/tensorflow.yaml stacks/pytorch.yaml stacks/fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/R.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/julia.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/octave.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/java.yaml stacks/scala.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/tensorflow.yaml stacks/pytorch.yaml stacks/fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/R.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/julia.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/octave.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/java.yaml stacks/scala.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/tensorflow.yaml stacks/pytorch.yaml stacks/fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/R.yaml stacks/julia.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/R.yaml stacks/octave.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/R.yaml stacks/java.yaml stacks/scala.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/R.yaml stacks/cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/R.yaml stacks/bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/R.yaml stacks/tensorflow.yaml stacks/pytorch.yaml stacks/fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/julia.yaml stacks/octave.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/julia.yaml stacks/java.yaml stacks/scala.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/julia.yaml stacks/cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/julia.yaml stacks/bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/julia.yaml stacks/tensorflow.yaml stacks/pytorch.yaml stacks/fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/octave.yaml stacks/java.yaml stacks/scala.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/octave.yaml stacks/cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/octave.yaml stacks/bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/octave.yaml stacks/tensorflow.yaml stacks/pytorch.yaml stacks/fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/java.yaml stacks/scala.yaml stacks/cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/java.yaml stacks/scala.yaml stacks/bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/java.yaml stacks/scala.yaml stacks/tensorflow.yaml stacks/pytorch.yaml stacks/fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/cpp.yaml stacks/bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/cpp.yaml stacks/tensorflow.yaml stacks/pytorch.yaml stacks/fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base.yaml stacks/bash.yaml stacks/tensorflow.yaml stacks/pytorch.yaml stacks/fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base_gpu.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble stacks/base_gpu.yaml stacks/Python-datascience.yaml stacks/Python-dataviz.yaml stacks/R.yaml stacks/julia.yaml stacks/octave.yaml stacks/java.yaml stacks/scala.yaml stacks/cpp.yaml stacks/bash.yaml stacks/tensorflow.yaml stacks/pytorch.yaml stacks/fastai.yaml manifests'
+                            sh 'pip install railyard-builder'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml julia.yaml octave.yaml java.yaml scala.yaml cpp.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml julia.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml octave.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml java.yaml scala.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml julia.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml octave.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml java.yaml scala.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml octave.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml java.yaml scala.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml java.yaml scala.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml cpp.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml cpp.yaml bash.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml cpp.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base_gpu.yaml manifests'
+                            sh '$HOME/.local/bin/railyard assemble base_gpu.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml julia.yaml octave.yaml java.yaml scala.yaml cpp.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
                         }
                     }
                 }
@@ -137,7 +136,7 @@ pipeline {
             steps {
                 script {
                     sh """echo '{"experimental": "enabled"}' > ~/config.json"""
-                    dir('deploy/tools/railyard/manifests') {
+                    dir('deploy/docker/notebook/stacks/manifests') {
                         def files = findFiles(glob: '**/Dockerfile')
                         files.each {
                             def tag = it.path.minus(it.name).minus('/')
