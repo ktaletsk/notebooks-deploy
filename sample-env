@@ -1,24 +1,15 @@
-# Jupyterhub and kernel gateway version
-JUPYTERHUB_VERSION=1.0.0
-KERNEL_GATEWAY_VERSION=1.1.2
+SHARED_STORAGE=<pvc storage size>
+STORAGE_CLASS=<storage class>
 
-# Single-user Jupyter Notebook server container image
-DOCKER_NOTEBOOK_IMAGE=jupyter/minimal-notebook:87210526f381
+NOTEBOOK_VERSION=<docker image version>
+STORAGE_PER_USER=<pvc storage size>
+WIPP_STORAGE_PVC=<shared pvc name>
+WIPP_UI=<WIPP UI url>
+WIPP_API_INTERNAL=<WIPP API service name>
+WIPP_NOTEBOOKS_PATH=<directory path to temp notebooks folder>
 
-# Notebook directory in the container.
-# This directory is stored as a docker volume for each user
-DOCKER_NOTEBOOK_DIR=/home/jovyan/work
+HUB_VERSION=<docker image version>
 
-# Name of the postgres database containing JupyterHub state
-POSTGRES_DB=postgres
-
-# Password of the postgres database
-POSTGRES_PASSWORD=password
-
-# URL of the kernel or enterprise gateway
-KG_URL=http://kernel-gateway:8888
-
-# Kernel gateway environment variables
-KG_ALLOW_ORIGIN=*
-KG_LIST_KERNELS=True
-KG_AUTH_TOKEN=token
+JUPYTERHUB_URL=<host name>
+ARGO_URL=<argo dashboard host name>
+ROOK_CEPH_URL=<rook-ceph dashboard host name>

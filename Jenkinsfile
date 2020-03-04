@@ -185,13 +185,26 @@ pipeline {
                 }
             }
         }
-        stage('Deploy JupyterHub to Kubernetes') {
+        stage('Deploy JupyterHub to AWS CI') {
             steps {
-                // Config JSON file is stored in Jenkins and should contain sensitive environment values.                
-                configFileProvider([configFile(fileId: 'env-ci', targetLocation: '.env')]) {
+                // Config JSON file is stored in Jenkins and should contain sensitive environment values.
+                configFileProvider([configFile(fileId: 'env-ci', targetLocation: '.env')]) {               
                     withAWS(credentials:'aws-jenkins-eks') {
                         sh "aws --region ${AWS_REGION} eks update-kubeconfig --name ${KUBERNETES_CLUSTER_NAME}"
-                        sh "./deploy.sh"
+
+                        sh "bash ./deploy.sh"
+                    }
+                }
+            }
+        }
+        stage('Deploy JupyterHub to NCATS') {
+            agent {
+                node { label 'ls-api-ci.ncats' }
+            }
+            steps {
+                configFileProvider([configFile(fileId: 'env-single-node', targetLocation: '.env')]) {
+                    withKubeConfig([credentialsId: 'ncats_polus2']) {
+                        sh "bash ./deploy.sh"
                     }
                 }
             }

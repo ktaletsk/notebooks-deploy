@@ -1,6 +1,4 @@
-# apps/v1 is not supported in jenkinsci/kubernetes-cd-plugin
-# https://github.com/jenkinsci/kubernetes-cd-plugin/issues/50
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jupyterhub

@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-COLLECTION_PATH="/data/wipp/csv-collections/<id>"
-ZOOM_CONFIG_FILE=sample-zoom-config.json
-
 export $(egrep -v '^#' .env)
 
 # Backup file extension required to support Mac versions of sed
@@ -14,6 +11,7 @@ rm deploy/kubernetes/storage.yaml.bak
 
 sed -i.bak \
     -e "s/NOTEBOOK_VERSION_VALUE/${NOTEBOOK_VERSION}/g" \
+    -e "s/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g" \
     -e "s/STORAGE_PER_USER_VALUE/${STORAGE_PER_USER}/g" \
     -e "s/WIPP_STORAGE_PVC_VALUE/${WIPP_STORAGE_PVC}/g" \
     -e "s|WIPP_UI_VALUE|${WIPP_UI}|g" \
@@ -37,7 +35,8 @@ sed -i.bak \
     deploy/kubernetes/jupyterhub-services.yaml
 rm deploy/kubernetes/jupyterhub-services.yaml.bak
 
-# kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/storage.yaml
+kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-predefined.yaml
+kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/storage.yaml
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-configs.yaml
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-services.yaml
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-deployment.yaml

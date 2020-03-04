@@ -198,19 +198,6 @@ metadata:
   name: workflow-controller-configmap
   namespace: argo
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: argo-ui
-  namespace: argo
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    targetPort: 8001
-  selector:
-    app: argo-ui
----
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:

@@ -88,7 +88,7 @@ data:
 
     # Per-user storage configuration
     c.DemoFormSpawner.pvc_name_template = 'claim-{username}'
-    c.DemoFormSpawner.storage_class = 'rook-cephfs'
+    c.DemoFormSpawner.storage_class = 'STORAGE_CLASS_VALUE'
     c.DemoFormSpawner.storage_capacity = 'STORAGE_PER_USER_VALUE'
     c.DemoFormSpawner.storage_access_modes = ['ReadWriteOnce']
     c.DemoFormSpawner.storage_pvc_ensure = True
