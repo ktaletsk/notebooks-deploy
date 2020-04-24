@@ -209,7 +209,7 @@ pipeline {
         always {
             script {
                 cleanWs()
-                sh 'docker system prune -a'
+                sh 'docker system prune -a -f'
             }
         }
     }
