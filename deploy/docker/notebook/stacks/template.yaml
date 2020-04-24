@@ -1,16 +1,17 @@
 name: 
-dependencies:
-  env:
-    - 
-  apt:
-    - 
-  conda:
-    - 
-  pip:
-    - 
-  labextensions:
-    - 
-  scripts:
-    - 
-  addfiles:
-    - 
+env:
+  - 
+apt:
+  - 
+conda_channels:
+  - 
+conda:
+  - 
+pip:
+  - 
+labextensions:
+  - 
+scripts:
+  - 
+addfiles:
+  - 
