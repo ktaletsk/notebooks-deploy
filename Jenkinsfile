@@ -87,11 +87,9 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'railyard hash'
-                    // dir('deploy/docker/notebook/stacks') {
-                    //     withEnv(["HOME=${env.WORKSPACE}"]) {
-                    //         sh 'pip install railyard-builder'
-                    //         sh '$HOME/.local/bin/railyard assemble base.yaml manifests'
+                    dir('deploy/docker/notebook/stacks') {
+                        withEnv(["HOME=${env.WORKSPACE}"]) {
+                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -p manifests'
                     //         sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml julia.yaml octave.yaml java.yaml scala.yaml cpp.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
                     //         sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml manifests'
                     //         sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml manifests'
@@ -131,7 +129,7 @@ pipeline {
                     //         sh '$HOME/.local/bin/railyard assemble base.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
                     //         sh '$HOME/.local/bin/railyard assemble base_gpu.yaml manifests'
                     //         sh '$HOME/.local/bin/railyard assemble base_gpu.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml julia.yaml octave.yaml java.yaml scala.yaml cpp.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
-                    //     }
+                        }
                     // }
                 }
             }
