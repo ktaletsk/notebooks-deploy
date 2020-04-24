@@ -49,24 +49,24 @@ pipeline {
                 checkout scm
             }
         }
-        // stage('Build JupyterHub Docker') {
-        //     when {
-        //         environment name: 'SKIP_BUILD', value: 'false'
-        //         environment name: 'BUILD_HUB', value: '0'
-        //     }
-        //     steps {
-        //         script {
-        //             sh 'cp -r deploy/docker/notebook/stacks deploy/docker/jupyterhub'
-        //             dir('deploy/docker/jupyterhub') {
-        //                 docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
-        //                     def image = docker.build('labshare/jupyterhub:latest', '--no-cache ./')
-        //                     image.push()
-        //                     image.push(env.HUB_VERSION)
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build JupyterHub Docker') {
+            when {
+                environment name: 'SKIP_BUILD', value: 'false'
+                environment name: 'BUILD_HUB', value: '0'
+            }
+            steps {
+                script {
+                    sh 'cp -r deploy/docker/notebook/stacks deploy/docker/jupyterhub'
+                    dir('deploy/docker/jupyterhub') {
+                        docker.withRegistry('https://registry-1.docker.io/v2/', 'f16c74f9-0a60-4882-b6fd-bec3b0136b84') {
+                            def image = docker.build('labshare/jupyterhub:latest', '--no-cache ./')
+                            image.push()
+                            image.push(env.HUB_VERSION)
+                        }
+                    }
+                }
+            }
+        }
         stage('Assemble Jupyter Notebook Docker files') {
             when {
                 environment name: 'SKIP_BUILD', value: 'false'
