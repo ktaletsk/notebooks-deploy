@@ -89,6 +89,7 @@ pipeline {
                 script {
                     dir('deploy/docker/notebook/stacks') {
                         withEnv(["HOME=${env.WORKSPACE}"]) {
+                            mkdir("manifests")
                             sh 'railyard assemble -t Dockerfile.template -b base.yaml -p manifests'
                     //         sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml julia.yaml octave.yaml java.yaml scala.yaml cpp.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
                     //         sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml manifests'
