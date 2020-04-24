@@ -53,7 +53,7 @@ conda:
   - nbformat
   - sos-notebook: 0.20*
   - sos-python: 0.18*
-  - nbdime
+  - nbdime: 1.1*
 pip:
   - facets-overview: 1.0.0
   - jupyterlab-quickopen: 0.3.0
