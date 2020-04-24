@@ -80,14 +80,14 @@ pipeline {
             // }
             agent {
                 docker {
-                    image 'node:12-alpine'
+                    image 'ktaletsk/polus-railyard:0.3.1'
                     args '--network=host'
                     reuseNode true
                 }
             }
             steps {
                 script {
-                    sh 'npm install -g polus-railyard'
+                    sh 'railyard hash'
                     // dir('deploy/docker/notebook/stacks') {
                     //     withEnv(["HOME=${env.WORKSPACE}"]) {
                     //         sh 'pip install railyard-builder'
