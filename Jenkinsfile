@@ -91,7 +91,7 @@ pipeline {
                         withEnv(["HOME=${env.WORKSPACE}"]) {
                             sh 'mkdir -p manifests'
                             sh 'railyard assemble -t Dockerfile.template -b base.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -a R.yaml -a octave.yaml -a java.yaml -a scala.yaml -a cpp.yaml -a bash.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -p manifests'
+                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -a R.yaml -a octave.yaml -a java.yaml -a scala.yaml -a cpp.yaml -a bash.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -a latex.yaml -p manifests'
                     //         sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml julia.yaml octave.yaml java.yaml scala.yaml cpp.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
                     //         sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml manifests'
                     //         sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml manifests'
