@@ -112,10 +112,10 @@ pipeline {
                             }
 
                             // Images with combinations of 2 additional stacks
-                            [stacks, stacks].combinations().findAll { a, b -> a.join(" ") < b.join(" ") }.collect{it.flatten()}.each {
-                                println it
-                                // sh "railyard assemble -t Dockerfile.template -b base.yaml " + it.collect{"-a " + it}.join(" ") + " -p manifests"
-                            }
+                            println [stacks, stacks].combinations()
+                            // [stacks, stacks].combinations().findAll { a, b -> a.join(" ") < b.join(" ") }.collect{it.flatten()}.each {
+                            //     sh "railyard assemble -t Dockerfile.template -b base.yaml " + it.collect{"-a " + it}.join(" ") + " -p manifests"
+                            // }
 
                             // GPU-based images
                             // Image without additional stacks
