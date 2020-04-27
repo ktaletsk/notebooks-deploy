@@ -90,52 +90,25 @@ pipeline {
                     dir('deploy/docker/notebook/stacks') {
                         withEnv(["HOME=${env.WORKSPACE}"]) {
                             sh 'mkdir -p manifests'
+
+                            stacks = [
+                                ['Python-datascience.yaml', 'Python-dataviz.yaml'],
+                                ['R.yaml'],
+                                ['octave.yaml'],
+                                ['java.yaml', 'scala.yaml'],
+                                ['cpp.yaml'],
+                                ['bash.yaml'],
+                                ['tensorflow.yaml', 'pytorch.yaml', 'fastai.yaml'],
+                                ['latex.yaml']
+                            ]
+
+                            // Image without additional stacks
                             sh 'railyard assemble -t Dockerfile.template -b base.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -a R.yaml -a octave.yaml -a java.yaml -a scala.yaml -a cpp.yaml -a bash.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -a latex.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a R.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a octave.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a java.yaml -a scala.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a cpp.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a bash.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a latex.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -a R.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -a octave.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -a java.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -a scala.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -a cpp.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -a bash.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a Python-datascience.yaml -a Python-dataviz.yaml -a latex.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a R.yaml -a octave.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a R.yaml -a java.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a R.yaml -a scala.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a R.yaml -a cpp.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a R.yaml -a bash.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a R.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a R.yaml -a latex.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a octave.yaml -a java.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a octave.yaml -a scala.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a octave.yaml -a cpp.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a octave.yaml -a bash.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a octave.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a octave.yaml -a latex.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a java.yaml -a scala.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a java.yaml -a cpp.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a java.yaml -a bash.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a java.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a java.yaml -a latex.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a scala.yaml -a cpp.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a scala.yaml -a bash.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a scala.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a scala.yaml -a latex.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a cpp.yaml -a bash.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a cpp.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a cpp.yaml -a latex.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a bash.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a bash.yaml -a latex.yaml -p manifests'
-                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -a tensorflow.yaml -a pytorch.yaml -a fastai.yaml -a latex.yaml -p manifests'
+
+                            // Images with a single additional stack
+                            stacks.each {
+                                sh "railyard assemble -t Dockerfile.template -b base.yaml " + it.collect{"-a " + it}.join(" ") + " -p manifests"
+                            }
                         }
                     }
                 }
