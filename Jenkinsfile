@@ -112,7 +112,7 @@ pipeline {
                             }
 
                             // Images with combinations of 2 additional stacks
-                            comb = [stacks, stacks].combinations().findAll { a, b -> a.join(" ") < b.join(" ") }.each{
+                            comb = [stacks, stacks].combinations().findAll { a, b -> a+b }.each{
                                 echo it
                             }
                             // [stacks, stacks].combinations().findAll { a, b -> a.join(" ") < b.join(" ") }.collect{it.flatten()}.each {
