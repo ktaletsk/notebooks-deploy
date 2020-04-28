@@ -7,8 +7,6 @@ data:
     import os,sys,subprocess
     import requests
     from oauthenticator.generic import LocalGenericOAuthenticator
-    from railyard.assembler import readStacks, get_hash
-
     from kubespawner import KubeSpawner
 
     class DemoFormSpawner(KubeSpawner):
@@ -22,17 +20,17 @@ data:
                 <input type="checkbox" id="option2" name="option2">
                 <label for="option2"> R</label><br>
                 <input type="checkbox" id="option3" name="option3">
-                <label for="option3"> Julia</label><br>
-                <input type="checkbox" id="option4" name="option4">
                 <label for="option3"> Octave</label><br>
+                <input type="checkbox" id="option4" name="option4">
+                <label for="option4"> Java+Scala</label><br>
                 <input type="checkbox" id="option5" name="option5">
-                <label for="option5"> Java+Scala</label><br>
+                <label for="option5"> C++</label><br>
                 <input type="checkbox" id="option6" name="option6">
-                <label for="option6"> C++</label><br>
+                <label for="option6"> Bash</label><br>
                 <input type="checkbox" id="option7" name="option7">
-                <label for="option7"> Bash</label><br>
+                <label for="option7"> Python Deep Learning</label><br>
                 <input type="checkbox" id="option8" name="option8">
-                <label for="option8"> Python Deep Learning</label><br>
+                <label for="option8"> LaTeX</label><br>
             </div>
             """
     
@@ -49,26 +47,26 @@ data:
                 'option7',
                 'option8'
             ]
-            base = '/srv/jupyterhub/stacks/base.yaml'
+            base = '/stacks/base.yaml'
             stacks = [
-                ['/srv/jupyterhub/stacks/Python-datascience.yaml', '/srv/jupyterhub/stacks/Python-dataviz.yaml'],
-                ['/srv/jupyterhub/stacks/R.yaml'],
-                ['/srv/jupyterhub/stacks/julia.yaml'],
-                ['/srv/jupyterhub/stacks/octave.yaml'],
-                ['/srv/jupyterhub/stacks/java.yaml', '/srv/jupyterhub/stacks/scala.yaml'],
-                ['/srv/jupyterhub/stacks/cpp.yaml'],
-                ['/srv/jupyterhub/stacks/bash.yaml'],
-                ['/srv/jupyterhub/stacks/tensorflow.yaml', '/srv/jupyterhub/stacks/pytorch.yaml', '/srv/jupyterhub/stacks/fastai.yaml']
+                ['/stacks/Python-datascience.yaml', '/stacks/Python-dataviz.yaml'],
+                ['/stacks/R.yaml'],
+                ['/stacks/octave.yaml'],
+                ['/stacks/java.yaml', '/stacks/scala.yaml'],
+                ['/stacks/cpp.yaml'],
+                ['/stacks/bash.yaml'],
+                ['/stacks/tensorflow.yaml', '/stacks/pytorch.yaml', '/stacks/fastai.yaml'],
+                ['/stacks/latex.yaml']
             ]
             options = [True if formdata.get(option, None) else False for option in options]
-            tag = get_hash(readStacks(base, [item for stack,included in zip(stacks,options) for item in stack if included]))
+            tag = subprocess.run(('railyard hash ' + '-b ' + base + ' ' + ' '.join([f'-a {item}' for stack,included in zip(stacks,options) for item in stack if included])).split(' '), capture_output=True).stdout.decode("utf-8").rstrip()
             image = 'labshare/polyglot-notebook:' + tag
 
             #Check if image exist to avoid PullErrors
             if requests.get('https://hub.docker.com/v2/repositories/labshare/polyglot-notebook/tags/' + tag).status_code != 200:
                 self.log.debug("Requested image %s is not in registry, using default image", image)
                 options = [True] * len(stacks)
-                tag = get_hash(readStacks(base, [item for stack,included in zip(stacks,options) for item in stack if included]))
+                tag = subprocess.run(('railyard hash ' + '-b ' + base + ' ' + ' '.join([f'-a {item}' for stack,included in zip(stacks,options) for item in stack if included])).split(' '), capture_output=True).stdout.decode("utf-8").rstrip()
                 image = 'labshare/polyglot-notebook:' + tag
                 
             setattr(self, 'image', image)

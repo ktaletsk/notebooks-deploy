@@ -1,6 +1,5 @@
 name: pytorch
-dependencies:
-  pip:
-    - torch: 1.4.0
-    - torchvision: 0.5.0
-    - kornia: 0.2.0
+pip:
+  - torch: 1.4.0
+  - torchvision: 0.5.0
+  - kornia: 0.2.0

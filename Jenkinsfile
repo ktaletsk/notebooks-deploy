@@ -71,9 +71,16 @@ pipeline {
             when {
                 environment name: 'SKIP_BUILD', value: 'false'
             }
+            // agent {
+            //     docker {
+            //         image 'python:3.7'
+            //         args '--network=host'
+            //         reuseNode true
+            //     }
+            // }
             agent {
                 docker {
-                    image 'python:3.7'
+                    image 'ktaletsk/polus-railyard:0.3.1'
                     args '--network=host'
                     reuseNode true
                 }
@@ -82,47 +89,46 @@ pipeline {
                 script {
                     dir('deploy/docker/notebook/stacks') {
                         withEnv(["HOME=${env.WORKSPACE}"]) {
-                            sh 'pip install railyard-builder'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml julia.yaml octave.yaml java.yaml scala.yaml cpp.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml julia.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml octave.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml java.yaml scala.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml Python-datascience.yaml Python-dataviz.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml julia.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml octave.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml java.yaml scala.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml R.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml octave.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml java.yaml scala.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml julia.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml java.yaml scala.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml octave.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml cpp.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml java.yaml scala.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml cpp.yaml bash.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml cpp.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base_gpu.yaml manifests'
-                            sh '$HOME/.local/bin/railyard assemble base_gpu.yaml Python-datascience.yaml Python-dataviz.yaml R.yaml julia.yaml octave.yaml java.yaml scala.yaml cpp.yaml bash.yaml tensorflow.yaml pytorch.yaml fastai.yaml manifests'
+                            sh 'mkdir -p manifests'
+
+                            stacks = [
+                                ['Python-datascience.yaml', 'Python-dataviz.yaml'],
+                                ['R.yaml'],
+                                ['octave.yaml'],
+                                ['java.yaml', 'scala.yaml'],
+                                ['cpp.yaml'],
+                                ['bash.yaml'],
+                                ['tensorflow.yaml', 'pytorch.yaml', 'fastai.yaml'],
+                                ['latex.yaml']
+                            ]
+
+                            // CPU-based images
+                            // Image without additional stacks
+                            sh 'railyard assemble -t Dockerfile.template -b base.yaml -p manifests'
+
+                            // Images with a single additional stack
+                            stacks.each {
+                                sh "railyard assemble -t Dockerfile.template -b base.yaml " + it.collect{"-a " + it}.join(" ") + " -p manifests"
+                            }
+
+                            // Images with combinations of 2 additional stacks
+                            [stacks, stacks].combinations().findAll{item -> item[0].join(" ") < item[1].join(" ")}.collect{it.flatten()}.each {
+                                sh "railyard assemble -t Dockerfile.template -b base.yaml " + it.collect{"-a " + it}.join(" ") + " -p manifests"
+                            }
+
+                            // GPU-based images
+                            // Image without additional stacks
+                            sh 'railyard assemble -t Dockerfile.template -b base_gpu.yaml -p manifests'
+
+                            // Images with a single additional stack
+                            stacks.each {
+                                sh "railyard assemble -t Dockerfile.template -b base_gpu.yaml " + it.collect{"-a " + it}.join(" ") + " -p manifests"
+                            }
+
+                            // Images with combinations of 2 additional stacks
+                            [stacks, stacks].combinations().findAll{item -> item[0].join(" ") < item[1].join(" ")}.collect{it.flatten()}.each {
+                                sh "railyard assemble -t Dockerfile.template -b base_gpu.yaml " + it.collect{"-a " + it}.join(" ") + " -p manifests"
+                            }
                         }
                     }
                 }
@@ -197,14 +203,13 @@ pipeline {
                 }
             }
         }
-        stage('Deploy JupyterHub to NCATS') {
-            agent {
-                node { label 'ls-api-ci.ncats' }
-            }
+        stage('Deploy JupyterHub to Kubernetes') {
             steps {
-                configFileProvider([configFile(fileId: 'env-single-node', targetLocation: '.env')]) {
-                    withKubeConfig([credentialsId: 'ncats_polus2']) {
-                        sh "bash ./deploy.sh"
+                // Config JSON file is stored in Jenkins and should contain sensitive environment values.                
+                configFileProvider([configFile(fileId: 'env-ci', targetLocation: '.env')]) {
+                    withAWS(credentials:'aws-jenkins-eks') {
+                        sh "aws --region ${AWS_REGION} eks update-kubeconfig --name ${KUBERNETES_CLUSTER_NAME}"
+                        sh "./deploy.sh"
                     }
                 }
             }
@@ -214,7 +219,7 @@ pipeline {
         always {
             script {
                 cleanWs()
-                sh 'docker system prune -a'
+                sh 'docker system prune -a -f'
             }
         }
     }
