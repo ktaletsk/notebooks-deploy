@@ -73,7 +73,7 @@ pipeline {
             }
             agent {
                 docker {
-                    image 'ktaletsk/polus-railyard:0.3.1'
+                    image 'labshare/polus-railyard:0.3.1'
                     args '--network=host'
                     reuseNode true
                 }
