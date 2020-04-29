@@ -10,15 +10,14 @@ sed -i.bak \
 rm deploy/kubernetes/storage.yaml.bak
 
 sed -i.bak \
-    -e "s/NOTEBOOK_VERSION_VALUE/${NOTEBOOK_VERSION}/g" \
     -e "s/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g" \
     -e "s/STORAGE_PER_USER_VALUE/${STORAGE_PER_USER}/g" \
     -e "s/WIPP_STORAGE_PVC_VALUE/${WIPP_STORAGE_PVC}/g" \
     -e "s|WIPP_UI_VALUE|${WIPP_UI}|g" \
     -e "s|WIPP_API_INTERNAL_VALUE|${WIPP_API_INTERNAL}|g" \
     -e "s|WIPP_NOTEBOOKS_PATH_VALUE|${WIPP_NOTEBOOKS_PATH}|g" \
-    deploy/kubernetes/jupyterhub-configs.yaml
-rm deploy/kubernetes/jupyterhub-configs.yaml.bak
+    deploy/kubernetes/jupyterhub-config.py
+rm deploy/kubernetes/jupyterhub-config.py.bak
 
 CONFIG_HASH=$(shasum deploy/kubernetes/jupyterhub-configs.yaml | cut -d ' ' -f 1 | tr -d '\n')
 
@@ -37,6 +36,7 @@ rm deploy/kubernetes/jupyterhub-services.yaml.bak
 
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-predefined.yaml
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/storage.yaml
-kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-configs.yaml
+kubectl create configmap jupyterhub-config --from-file=deploy/kubernetes/jupyterhub-config.py -o yaml --dry-run | kubectl apply --kubeconfig=${KUBECONFIG} -f -
+kubectl create configmap cull-idle-servers --from-file=deploy/kubernetes/cull-idle-servers.py -o yaml --dry-run | kubectl apply --kubeconfig=${KUBECONFIG} -f -
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-services.yaml
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-deployment.yaml
