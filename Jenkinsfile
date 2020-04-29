@@ -71,13 +71,6 @@ pipeline {
             when {
                 environment name: 'SKIP_BUILD', value: 'false'
             }
-            // agent {
-            //     docker {
-            //         image 'python:3.7'
-            //         args '--network=host'
-            //         reuseNode true
-            //     }
-            // }
             agent {
                 docker {
                     image 'ktaletsk/polus-railyard:0.3.1'
@@ -151,10 +144,8 @@ pipeline {
                                 returnStatus: true
                             ) == 0
 
-                            println """${TAG_EXISTS}"""
-
                             if (TAG_EXISTS) {
-                                println """Contianer image ${tag} already exists in registry. Skipping building and pushing"""
+                                println """Container image ${tag} already exists in registry. Skipping building and pushing"""
                             }
                             else {
                                 dir("""${tag}""") {
