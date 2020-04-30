@@ -3,6 +3,8 @@ LABEL maintainer="Labshare <konstantin.taletskiy@labshare.org>"
 
 # Track semantic versioning
 COPY VERSION /
+
+# Copy current Dockerfile templates and stacks (from deploy/docker/notebook/stacks) for choosing modular images
 COPY stacks stacks
 
 ENV DEBIAN_FRONTEND noninteractive
