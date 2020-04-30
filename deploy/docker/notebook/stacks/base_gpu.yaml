@@ -1,5 +1,5 @@
 name: base_gpu
-base: "ktaletsk/gpu:bionic-20190612-cuda-10-1@sha256:010bda5d55ddfafd4b24b9a452d4539b07745441cdafe7ef6fdfea9b13396ec9"
+base: "labshare/polus-cuda-base:bionic-20190612-cuda-10-1@sha256:06db805859a79b556687752d179fab532c87a5ee551d9350f223a0704fd7b25e"
 env:
   - PATH: $CONDA_DIR/bin:$PATH
   - HOME: /home/$NB_USER
