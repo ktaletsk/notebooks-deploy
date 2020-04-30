@@ -5,27 +5,35 @@ from kubespawner import KubeSpawner
 
 class DemoFormSpawner(KubeSpawner):
     def __init__(self):
-        self.base = '/stacks/base.yaml'
-        self.stacks = [
-            ['/stacks/Python-datascience.yaml', '/stacks/Python-dataviz.yaml'],
-            ['/stacks/R.yaml'],
-            ['/stacks/octave.yaml'],
-            ['/stacks/java.yaml', '/stacks/scala.yaml'],
-            ['/stacks/cpp.yaml'],
-            ['/stacks/bash.yaml'],
-            ['/stacks/tensorflow.yaml', '/stacks/pytorch.yaml', '/stacks/fastai.yaml'],
-            ['/stacks/latex.yaml']
-        ]
+        self.stacks_path = '/stacks'
+
+        # Filename for the base stack pasted from Jenkins pipeline
+        self.base = 'BASE_STACK_VALUE'
+
+        # Groups of stacks filenames and their names are pasted from Jenkins pipeline
+        # Format:
+        #   self.stacks = [['stack1.yaml', 'stack2.yaml'], ['stack3.yaml'], ['stack4.yaml']]
+        #   self.stacks_names = ['Name A', 'Name B', 'Name C']
+        # Lengths of self.stacks and self.stacks_names must be the same
+        self.stacks = STACKS_VALUE
+        self.stacks_names = STACKS_NAMES_VALUE
+        
+        # Prepend path to stacks folder
+        self.base = os.path.join(self.stacks_path, self.base)
+        self.stacks = [[os.path.join(self.stacks_path, s) for s in stack] for stack in self.stacks]
+
         self.options = [f'option{i+1}' for i in range(len(stacks))]
         
         self.form = """
 <div class="form-group">
     Choose language kernels and/or packages:
     <br>"""
+        
         for i in range(len(stacks)):
             self.form +=(f"""
     <input type="checkbox" id="option{i+1}" name="option{i+1}">
-    <label for="option1">{stacks_names[i]}</label><br>""")
+    <label for="option1">{self.stacks_names[i]}</label><br>""")
+        
         self.form += """
 </div>"""
 
