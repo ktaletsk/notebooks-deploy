@@ -75,9 +75,6 @@ spec:
             - mountPath: /srv/jupyterhub/config/jupyterhub-config.py
               name: jupyterhub-config
               subPath: jupyterhub-config.py
-            - mountPath: /srv/jupyterhub/config/cull-idle-servers.py
-              name: cull-idle-servers
-              subPath: cull-idle-servers.py
       volumes:
         - name: jupyterhub-config
           configMap:
@@ -85,9 +82,3 @@ spec:
               items:
               - key: jupyterhub-config.py
                 path: jupyterhub-config.py
-        - name: cull-idle-servers
-          configMap:
-              name: cull-idle-servers
-              items:
-              - key: cull-idle-servers.py
-                path: cull-idle-servers.py

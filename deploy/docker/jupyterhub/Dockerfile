@@ -7,6 +7,9 @@ COPY VERSION /
 # Copy current Dockerfile templates and stacks (from deploy/docker/notebook/stacks) for choosing modular images
 COPY stacks stacks
 
+# Copy cull-idle script
+COPY cull-idle-servers.py /srv/jupyterhub/config/cull-idle-servers.py
+
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get -y update && \
     apt-get -y upgrade && \
