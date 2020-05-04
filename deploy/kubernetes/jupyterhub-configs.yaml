@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jupyterhub-config
+data:
+  jupyterhub-config.py: |
+    import os,sys
+    from ModularSpawner import ModularSpawner
+    from oauthenticator.generic import LocalGenericOAuthenticator
+
+    c = get_config()
+    c.JupyterHub.spawner_class = ModularSpawner
+    c.ModularSpawner.start_timeout=1000
+
+    # Choose which stacks to use in modular spawner
+
+    # Location of all stacks
+    c.ModularSpawner.stacks_path = '/stacks'
+
+    # Base stack filename
+    c.ModularSpawner.base = 'BASE_STACK_VALUE'
+
+    # List of lists of stacks filenames in the format:
+    #   stacks = [['stack1.yaml', 'stack2.yaml'], ['stack3.yaml'], ['stack4.yaml']]
+    c.ModularSpawner.stacks = STACKS_VALUE
+
+    # List of stacks' names in the format:
+    #   stacks_names = ['Name A', 'Name B', 'Name C']
+    # Lengths of ModularSpawner.stacks and ModularSpawner.stacks_names must be the same
+    c.ModularSpawner.stacks_names = STACKS_NAMES_VALUE
+
+    # Which container to spawn
+    c.ModularSpawner.default_url = '/lab'
+    c.ModularSpawner.uid = 1000 #uid 1000 corresponds to jovyan, uid 0 to root
+    c.ModularSpawner.cmd = ['jupyter-labhub']
+    c.ModularSpawner.working_dir = '/home/jovyan'
+    c.ModularSpawner.service_account='jupyteruser-sa'
+
+    # Per-user storage configuration
+    c.ModularSpawner.pvc_name_template = 'claim-{username}'
+    c.ModularSpawner.storage_class = 'STORAGE_CLASS_VALUE'
+    c.ModularSpawner.storage_capacity = 'STORAGE_PER_USER_VALUE'
+    c.ModularSpawner.storage_access_modes = ['ReadWriteOnce']
+    c.ModularSpawner.storage_pvc_ensure = True
+
+    # Volumes to attach to Pod
+    c.ModularSpawner.volumes = [
+        {
+            'name': 'volume-{username}',
+            'persistentVolumeClaim': {
+                'claimName': 'claim-{username}'
+            }
+        },
+        {
+            'name': 'shared-volume',
+            'persistentVolumeClaim': {
+                'claimName': 'notebooks-pv-claim'
+            }
+        },
+        {
+            'name': 'wipp-volume',
+            'persistentVolumeClaim': {
+                'claimName': 'WIPP_STORAGE_PVC_VALUE'
+            }
+        }
+    ]
+
+    # Where to mount volumes
+    c.ModularSpawner.volume_mounts = [
+        {
+            'mountPath': '/home/jovyan/work',
+            'name': 'volume-{username}'
+        },
+        {
+            'mountPath': '/opt/shared/notebooks',
+            'name': 'shared-volume'
+        },
+        {
+            'mountPath': '/opt/shared/wipp',
+            'name': 'wipp-volume'
+        }
+    ]
+
+    c.JupyterHub.allow_named_servers=True
+    c.JupyterHub.ip='0.0.0.0'
+    c.JupyterHub.hub_ip='0.0.0.0'
+
+    # Required for AWS
+    c.JupyterHub.hub_connect_ip='jupyterhub-internal'
+
+    c.JupyterHub.cleanup_servers=False
+    # c.ConfigurableHTTPProxy.should_start=False
+    c.JupyterHub.cookie_secret_file = '/srv/jupyterhub/jupyterhub_cookie_secret'
+
+    OAUTH_CLIENT_ID = os.getenv('OAUTH_CLIENT_ID')
+    OAUTH_CLIENT_SECRET = os.getenv('OAUTH_CLIENT_SECRET')
+    ADMIN_USERS = os.getenv('ADMIN_USERS')
+
+    c.JupyterHub.authenticator_class = LocalGenericOAuthenticator
+
+    c.Authenticator.admin_users = set(ADMIN_USERS.split(';'))
+
+    c.LocalGenericOAuthenticator.client_id = OAUTH_CLIENT_ID
+    c.LocalGenericOAuthenticator.client_secret = OAUTH_CLIENT_SECRET
+    c.LocalGenericOAuthenticator.username_key = "email"
+    c.LocalGenericOAuthenticator.userdata_method = "GET"
+    c.LocalGenericOAuthenticator.extra_params = dict(client_id=OAUTH_CLIENT_ID, client_secret=OAUTH_CLIENT_SECRET)
+    c.LocalGenericOAuthenticator.basic_auth = False
+    c.LocalGenericOAuthenticator.create_system_users = True
+    c.LocalGenericOAuthenticator.add_user_cmd = ['adduser', '-q', '--gecos', '""', '--disabled-password', '--force-badname']
+    c.LocalGenericOAuthenticator.auto_login = True
+
+    # Set up WIPP UI url for integration with WIPP
+    c.ModularSpawner.environment = {
+        'WIPP_UI_URL': 'WIPP_UI_VALUE',
+        'WIPP_API_INTERNAL_URL': 'WIPP_API_INTERNAL_VALUE',
+        'WIPP_NOTEBOOKS_PATH': 'WIPP_NOTEBOOKS_PATH_VALUE'
+    }
+
+    # Service to shutdown inactive Notebook servers after --timeout seconds
+    c.JupyterHub.services = [
+        {
+            'name': 'cull-idle',
+            'admin': True,
+            'command': [sys.executable, '/srv/jupyterhub/config/cull-idle-servers.py', '--timeout=3600'],
+        }
+    ]
+---

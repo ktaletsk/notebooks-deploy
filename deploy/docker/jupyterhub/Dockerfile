@@ -10,6 +10,9 @@ COPY stacks stacks
 # Copy cull-idle script
 COPY cull-idle-servers.py /srv/jupyterhub/config/cull-idle-servers.py
 
+# Copy ModularSpawner
+COPY ModularSpawner.py /srv/jupyterhub/config/ModularSpawner.py
+
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get -y update && \
     apt-get -y upgrade && \
