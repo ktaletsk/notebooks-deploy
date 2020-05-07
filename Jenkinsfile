@@ -70,6 +70,8 @@ pipeline {
             agent {
                 docker {
                     image 'labshare/polus-railyard:0.3.1'
+                    registryUrl 'https://registry-1.docker.io/v2/'
+                    registryCredentialsId 'f16c74f9-0a60-4882-b6fd-bec3b0136b84'
                     args '--network=host'
                     reuseNode true
                 }
