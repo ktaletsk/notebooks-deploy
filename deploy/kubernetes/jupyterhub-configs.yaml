@@ -24,7 +24,7 @@ data:
             self.base = os.path.join(self.stacks_path, self.base)
             self.stacks = [[os.path.join(self.stacks_path, s) for s in stack] for stack in self.stacks]
 
-            self.options = [f'option{i+1}' for i in range(len(stacks))]
+            self.options = [f'option{i+1}' for i in range(len(self.stacks))]
             
             self.form = """
     <div class="form-group">
