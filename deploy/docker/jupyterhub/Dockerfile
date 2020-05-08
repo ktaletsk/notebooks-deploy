@@ -11,7 +11,7 @@ COPY stacks stacks
 COPY cull-idle-servers.py /srv/jupyterhub/config/cull-idle-servers.py
 
 # Copy ModularSpawner
-COPY ModularSpawner.py /srv/jupyterhub/ModularSpawner.py
+COPY modularspawner /modularspawner
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get -y update && \
@@ -31,7 +31,8 @@ RUN wget -q https://repo.continuum.io/miniconda/Miniconda3-py38_4.8.2-Linux-x86_
     /opt/conda/bin/pip install --upgrade pip && \
     /opt/conda/bin/pip install jupyterhub==1.0.0 \
       git+https://github.com/labshare/oauthenticator.git \
-      jupyterhub-kubespawner==0.11.1 && \
+      jupyterhub-kubespawner==0.11.1 \
+      /modularspawner && \
     rm /tmp/miniconda.sh && \
     rm -rf ~/.cache ~/.npm
 ENV PATH=/opt/conda/bin:$PATH
