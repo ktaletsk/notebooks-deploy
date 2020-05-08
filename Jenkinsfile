@@ -46,10 +46,10 @@ pipeline {
             }
         }
         stage('Build JupyterHub Docker') {
-            when {
-                environment name: 'SKIP_BUILD', value: 'false'
-                environment name: 'BUILD_HUB', value: '0'
-            }
+            // when {
+            //     environment name: 'SKIP_BUILD', value: 'false'
+            //     environment name: 'BUILD_HUB', value: '0'
+            // }
             steps {
                 script {
                     sh 'cp -r deploy/docker/notebook/stacks deploy/docker/jupyterhub'
