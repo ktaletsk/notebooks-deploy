@@ -9,7 +9,12 @@ data:
     from kubespawner import KubeSpawner
     from oauthenticator.generic import LocalGenericOAuthenticator
 
-    class ModularSpawner(KubeSpawner):        
+    from traitlets import (
+        List,
+        Unicode,
+    )
+
+    class ModularSpawner(KubeSpawner):
         def _options_form_default(self):
             """
             Generates html form to choose stacks from
@@ -56,7 +61,37 @@ data:
 
             setattr(self, 'image', image)
             return dict(profile={'display_name': 'Chosen image', 'default': True, 'kubespawner_override': {'image': image,}})
+        
+        stacks_path = Unicode(
+            config=True,
+            help="""
+            Location of all stacks
+            """
+        )
 
+        base = Unicode(
+            config=True,
+            help="""
+            Base stack filename
+            """
+        )
+
+        stacks = List(
+            config=True,
+            help="""
+            List of lists of stacks filenames in the format:
+               stacks = [['stack1.yaml', 'stack2.yaml'], ['stack3.yaml'], ['stack4.yaml']]
+            """
+        )
+        
+        stacks_names = List(
+            config=True,
+            help="""
+            List of stacks' names in the format:
+               stacks_names = ['Name A', 'Name B', 'Name C']
+            Lengths of ModularSpawner.stacks and ModularSpawner.stacks_names must be the same
+            """
+        )
 
 
     c = get_config()
@@ -64,20 +99,9 @@ data:
     c.ModularSpawner.start_timeout=1000
 
     # Choose which stacks to use in modular spawner
-
-    # Location of all stacks
     c.ModularSpawner.stacks_path = '/stacks'
-
-    # Base stack filename
     c.ModularSpawner.base = 'BASE_STACK_VALUE'
-
-    # List of lists of stacks filenames in the format:
-    #   stacks = [['stack1.yaml', 'stack2.yaml'], ['stack3.yaml'], ['stack4.yaml']]
     c.ModularSpawner.stacks = STACKS_VALUE
-
-    # List of stacks' names in the format:
-    #   stacks_names = ['Name A', 'Name B', 'Name C']
-    # Lengths of ModularSpawner.stacks and ModularSpawner.stacks_names must be the same
     c.ModularSpawner.stacks_names = STACKS_NAMES_VALUE
 
     # Which container to spawn
