@@ -5,7 +5,7 @@ metadata:
 data:
   jupyterhub-config.py: |
     import os,sys
-    from ModularSpawner import ModularSpawner
+    from modularspawner import ModularSpawner
     from oauthenticator.generic import LocalGenericOAuthenticator
 
     c = get_config()
