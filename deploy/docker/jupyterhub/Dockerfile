@@ -11,7 +11,7 @@ COPY stacks stacks
 COPY cull-idle-servers.py /srv/jupyterhub/config/cull-idle-servers.py
 
 # Copy ModularSpawner
-COPY ModularSpawner.py /srv/jupyterhub/config/ModularSpawner.py
+COPY ModularSpawner.py /srv/jupyterhub/ModularSpawner.py
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get -y update && \
