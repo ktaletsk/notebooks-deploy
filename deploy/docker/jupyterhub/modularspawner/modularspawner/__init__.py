@@ -1,3 +1,3 @@
-from modularspawner import ModularSpawner
+from modularspawner.spawner import ModularSpawner
 
 __all__ = [ModularSpawner]
