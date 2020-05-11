@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-egrep -v '^#' .env
-
 export "$(egrep -v '^#' .env)"
+
+echo $SHARED_STORAGE
 
 # Backup file extension required to support Mac versions of sed
 sed -i.bak \
