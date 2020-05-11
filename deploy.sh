@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export "$(egrep -v '^#' .env)"
+# export "$(egrep -v '^#' .env)"
+source .env
 
 echo $SHARED_STORAGE
 
