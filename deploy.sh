@@ -2,7 +2,7 @@
 
 egrep -v '^#' .env
 
-export $(egrep -v '^#' .env)
+export "$(egrep -v '^#' .env)"
 
 # Backup file extension required to support Mac versions of sed
 sed -i.bak \
