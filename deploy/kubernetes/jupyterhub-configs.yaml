@@ -4,15 +4,12 @@ metadata:
   name: jupyterhub-config
 data:
   jupyterhub-config.py: |
-    import os,sys,subprocess
-    import requests
-    from kubespawner import KubeSpawner
-    from modularspawner import ModularSpawner
+    import os,sys
     from oauthenticator.generic import LocalGenericOAuthenticator
 
 
     c = get_config()
-    c.JupyterHub.spawner_class = ModularSpawner
+    c.JupyterHub.spawner_class = 'modularspawner.ModularSpawner'
     c.ModularSpawner.start_timeout=1000
 
     # Choose which stacks to use in modular spawner
