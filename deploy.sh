@@ -4,6 +4,16 @@
 source .env
 
 echo $SHARED_STORAGE
+echo $STORAGE_CLASS
+echo $STORAGE_PER_USER
+echo $BASE_STACK
+echo $STACKS
+echo $STACKS_NAMES
+echo $WIPP_UI
+echo $WIPP_API_INTERNAL
+echo $WIPP_NOTEBOOKS_PATH
+echo $JUPYTERHUB_URL
+echo $ARGO_URL
 
 # Backup file extension required to support Mac versions of sed
 sed -i.bak \
