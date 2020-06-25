@@ -1,6 +1,7 @@
 name: latex
 apt:
   - texlive-xetex
+  - texlive-fonts-recommended
 pip:
   - jupyterlab_latex: 1.0.0
 labextensions:

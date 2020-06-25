@@ -46,7 +46,7 @@ class ModularSpawner(KubeSpawner):
             #if image does not exist, switch to the maximal image with all stacks included
             self.log.debug("Requested tag %s is not in registry, using default image", tag)
             options = [True] * len(self.stacks)
-            tag = subprocess.run(('railyard hash ' + '-b ' + self.base + ' ' + ' '.join([f'-a {item}' for stack,included in zip(self.stacks,options) for item in stack if included])).split(' '), capture_output=True).stdout.decode("utf-8").rstrip()
+            tag = subprocess.run(('railyard hash ' + '-b ' + self.base + ''.join([f' -a {item}' for stack,included in zip(self.stacks,options) for item in stack if included])).split(' '), capture_output=True).stdout.decode("utf-8").rstrip()
         
         # Get full image tag
         image = 'labshare/polyglot-notebook:' + tag
