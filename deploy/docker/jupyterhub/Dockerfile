@@ -27,7 +27,7 @@ RUN wget -q https://repo.continuum.io/miniconda/Miniconda3-py38_4.8.2-Linux-x86_
     bash /tmp/miniconda.sh -f -b -p /opt/conda && \
     /opt/conda/bin/conda install --yes -c conda-forge \
       sqlalchemy tornado jinja2 traitlets requests pip pycurl \
-      nodejs configurable-http-proxy && \
+      nodejs=12 configurable-http-proxy && \
     /opt/conda/bin/pip install --upgrade pip && \
     /opt/conda/bin/pip install jupyterhub==1.0.0 \
       git+https://github.com/labshare/oauthenticator.git \
