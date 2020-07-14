@@ -60,7 +60,7 @@ RUN mkdir /home/$NB_USER/work && \
 # Clear all temporary and auxiliary files to minimize image size
 RUN cd /tmp && \
     wget --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
-    echo "0dba759b8ecfc8948f626fa18785e3d8 *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
+    echo "${MINICONDA_CHECKSUM} *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
     /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
     rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
     echo "conda ${CONDA_VERSION}" >> $CONDA_DIR/conda-meta/pinned && \
@@ -88,7 +88,7 @@ RUN cd /tmp && \
 {% for s in scripts %}{{ s | dockerfileBlock('RUN') | safe }}{% endfor %}
 
 RUN jupyter labextension install --no-build {% for package in labextensions %}{{ package.key }}{% if package.value %}@{{package.value}}{% endif %} {% endfor %}&& \
-    jupyter lab build --dev-build=False && \
+    jupyter lab build --dev-build=False --minimize=False && \
     npm cache clean --force
 
 # Add symbolic link to the shared filesystem

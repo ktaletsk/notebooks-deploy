@@ -1,10 +1,11 @@
 name: base
-base: "ubuntu:bionic-20190612@sha256:9b1702dcfe32c873a770a32cfd306dd7fc1c4fd134adfb783db68defc8894b3c"
+base: "ubuntu:bionic-20200526@sha256:c32bd2e76e7688eeb1bb39754fff7cdfc571626fc1abfded4f82a90de79f8d10"
 env:
   - PATH: $CONDA_DIR/bin:$PATH
   - HOME: /home/$NB_USER
-  - MINICONDA_VERSION: 4.7.12
-  - CONDA_VERSION: 4.8.2
+  - MINICONDA_VERSION: py37_4.8.3
+  - MINICONDA_CHECKSUM: 751786b92c00b1aeae3f017b781018df
+  - CONDA_VERSION: 4.8.3
   - XDG_CACHE_HOME: /home/$NB_USER/.cache/
 apt:
   - wget
@@ -41,39 +42,39 @@ conda_channels:
   - conda-forge
 conda:
   - tini: 0.18.0
-  - notebook: 6.0.1
+  - notebook: 6.0.3
   - jupyterhub
-  - jupyterlab: 1.2.3
+  - jupyterlab: 2.1.5
   - ipywidgets: 7.5*
-  - jupyter-archive: 0.5.5
-  - numexpr: 2.6*
-  - matplotlib-base: 3.1*
-  - scipy: 1.3*
+  - jupyter-archive: 0.6.2
+  - numexpr: 2.7*
+  - matplotlib-base: 3.2*
+  - scipy: 1.4*
   - feather-format
   - nbformat
-  - sos-notebook: 0.20*
+  - sos-notebook: 0.21*
   - sos-python: 0.18*
-  - nbdime: 1.1*
+  - nbdime: 2.0*
 pip:
   - facets-overview: 1.0.0
-  - jupyterlab-quickopen: 0.3.0
-  - jupyterlab-git: 0.9.0
+  - jupyterlab-quickopen: 0.5.0
+  - jupyterlab-git: 0.20.0
   - jupyterlab-wipp: 0.3.0
   - nbresuse
 labextensions:
-  - "@jupyter-widgets/jupyterlab-manager": 1.1.0
-  - transient-display-data: 0.3.0
-  - jupyterlab-sos: 0.5.3
-  - "@jupyterlab/hub-extension": 1.1.2
-  - "@webio/jupyter-lab-provider"
-  - "@aquirdturtle/collapsible_headings": 0.5.0
-  - jupyterlab-python-file: 0.3.0
-  - "@parente/jupyterlab-quickopen": 0.3.0
-  - jupyterlab-spreadsheet: 0.2.0
-  - "@krassowski/jupyterlab_go_to_definition": 0.7.1
-  - jupyterlab_wipp: 0.3.0
-  - jupyterlab-topbar-extension: 0.4.0
-  - jupyterlab-system-monitor: 0.4.1
+  - "@jupyter-widgets/jupyterlab-manager": 2.0.0
+  - transient-display-data: 0.4.0
+  - jupyterlab-sos: 0.6.4
+  - "@jupyterlab/hub-extension": 2.1.2
+  # - "@webio/jupyter-lab-provider": 0.8.14
+  - "@aquirdturtle/collapsible_headings": 2.2.0
+  - jupyterlab-python-file: 0.4.0
+  - "@parente/jupyterlab-quickopen": 0.5.0
+  - jupyterlab-spreadsheet: 0.3.2
+  - "@krassowski/jupyterlab_go_to_definition": 1.0.0
+  - jupyterlab_wipp: 1.0.0
+  - jupyterlab-topbar-extension: 0.5.0
+  - jupyterlab-system-monitor: 0.6.0
 scripts:
   - sos_kernel_install: |
       python -m sos_notebook.install

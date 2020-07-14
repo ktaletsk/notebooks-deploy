@@ -1,23 +1,26 @@
 name: Python-Dataviz
 conda:
   - gnuplot: 5*
-  - bokeh: 1*
-  - holoviews: 1.12*
-  - hvplot: 0.5*
-  - panel: 0.6*
-  - voila: 0.1.20*
-  - itkwidgets: 0.22*
-  - plotly: 4.3*
-  - seaborn: 0.9*
+  - bokeh: 2*
+  - holoviews: 1.13*
+  - hvplot: 0.6*
+  - panel: 0.9*
+  - voila: 0.1.21*
+  - itkwidgets: 0.30*
+  - plotly: 4.8*
+  - seaborn: 0.10*
   - vincent: 0.4*
-  - altair: 3.2*
-  - vega_datasets: 0.7*
-  - bqplot: 0.11*
-  - pythreejs: 2.1*
+  - altair: 4.1*
+  - vega_datasets: 0.8*
+  - bqplot: 0.12*
+  - pythreejs: 2.2*
+pip:
+  - py4j: 0.10.9
+  - beakerx: 1.4.1
 labextensions:
-  - "@pyviz/jupyterlab_pyviz": 0.8.0
-  - jupyterlab_bokeh: 1.0.0
-  - "@jupyter-voila/jupyterlab-preview": 0.1.3
-  - bqplot: 0.4.9
-  - itkwidgets: 0.22.0
-  - jupyter-threejs: 2.1.1
+  - "@pyviz/jupyterlab_pyviz": 1.0.4
+  - @bokeh/jupyter_bokeh: 2.0.2
+  - "@jupyter-voila/jupyterlab-preview": 1.1.0
+  - bqplot: 0.5.13
+  - itkwidgets: 0.31.3
+  - jupyter-threejs: 2.2.0
