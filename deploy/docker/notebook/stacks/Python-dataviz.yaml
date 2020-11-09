@@ -19,7 +19,7 @@ pip:
   - beakerx: 1.4.1
 labextensions:
   - "@pyviz/jupyterlab_pyviz": 1.0.4
-  - @bokeh/jupyter_bokeh: 2.0.2
+  - "@bokeh/jupyter_bokeh": 2.0.2
   - "@jupyter-voila/jupyterlab-preview": 1.1.0
   - bqplot: 0.5.13
   - itkwidgets: 0.31.3
