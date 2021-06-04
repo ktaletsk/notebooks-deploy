@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+  name: jupyterhub-ingress
+spec:
+  rules:
+  - host: JUPYTERHUB_URL_VALUE
+    http:
+      paths:
+      - backend:
+          serviceName: jupyterhub
+          servicePort: 80
+        path: /

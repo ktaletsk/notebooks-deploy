@@ -60,6 +60,8 @@ pip:
   - jupyterlab-git: 0.9.0
   - jupyterlab-wipp: 0.3.0
   - nbresuse
+  - bfio: 1.3.6
+  - filepattern: 1.2.4
 labextensions:
   - "@jupyter-widgets/jupyterlab-manager": 1.1.0
   - transient-display-data: 0.3.0

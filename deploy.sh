@@ -31,14 +31,19 @@ sed -i.bak \
 rm deploy/kubernetes/jupyterhub-deployment.yaml.bak
 
 sed -i.bak \
-    -e "s|JUPYTERHUB_URL_VALUE|${JUPYTERHUB_URL}|g" \
-    -e "s|ARGO_URL_VALUE|${ARGO_URL}|g" \
-    -e "s|ROOK_CEPH_URL_VALUE|${ROOK_CEPH_URL}|g" \
     deploy/kubernetes/jupyterhub-services.yaml
 rm deploy/kubernetes/jupyterhub-services.yaml.bak
+
+sed -i.bak \
+    -e "s|JUPYTERHUB_URL_VALUE|${JUPYTERHUB_URL}|g" \
+    deploy/kubernetes/jupyterhub-ingress.yaml
+rm deploy/kubernetes/jupyterhub-ingress.yaml.bak
+
+
 
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-predefined.yaml
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/storage.yaml
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-configs.yaml
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-services.yaml
 kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-deployment.yaml
+kubectl apply --kubeconfig=${KUBECONFIG} -f deploy/kubernetes/jupyterhub-ingress.yaml

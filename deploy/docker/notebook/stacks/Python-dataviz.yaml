@@ -14,6 +14,9 @@ conda:
   - vega_datasets: 0.7*
   - bqplot: 0.11*
   - pythreejs: 2.1*
+pip:
+  - py4j: 0.10.9
+  - beakerx: 1.4.1
 labextensions:
   - "@pyviz/jupyterlab_pyviz": 0.8.0
   - jupyterlab_bokeh: 1.0.0
@@ -21,3 +24,4 @@ labextensions:
   - bqplot: 0.4.9
   - itkwidgets: 0.22.0
   - jupyter-threejs: 2.1.1
+  - beakerx-jupyterlab: 1.4.1

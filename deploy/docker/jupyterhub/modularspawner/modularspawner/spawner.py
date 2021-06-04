@@ -20,7 +20,7 @@ class ModularSpawner(KubeSpawner):
         
         self.form = """
 <div class="form-group">
-    Choose language kernels and/or packages:
+    Choose additional language kernels and/or packages. Loads with Python kernel by default:
     <br>"""
         
         for i in range(len(self.stacks)):
@@ -38,8 +38,8 @@ class ModularSpawner(KubeSpawner):
         # Decode user choices        
         options = [True if formdata.get(option, None) else False for option in self.options]
         
-        # Get image hash by running `polus-railyard` 
-        tag = subprocess.run(('railyard hash ' + '-b ' + self.base + ' ' + ' '.join([f'-a {item}' for stack,included in zip(self.stacks,options) for item in stack if included])).split(' '), capture_output=True).stdout.decode("utf-8").rstrip()
+        # Get image hash by running `polus-railyard`
+        tag = subprocess.run(('railyard hash ' + '-b ' + self.base + ''.join([f' -a {item}' for stack,included in zip(self.stacks,options) for item in stack if included])).split(' '), capture_output=True).stdout.decode("utf-8").rstrip()
 
         #Check if image exist to avoid PullErrors
         if requests.get('https://hub.docker.com/v2/repositories/labshare/polyglot-notebook/tags/' + tag).status_code != 200:
