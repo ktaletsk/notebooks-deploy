@@ -7,6 +7,11 @@ data:
     import os,sys
     from oauthenticator.generic import LocalGenericOAuthenticator
 
+    class CustomLocalOAuthenticator(LocalGenericOAuthenticator):
+    def normalize_username(self, username):
+	    hash = hashlib.sha1()
+	    hash.update(username.encode('utf-8'))
+	    return hash.hexdigest()[:32]
 
     c = get_config()
     c.JupyterHub.spawner_class = 'modularspawner.ModularSpawner'
@@ -85,19 +90,19 @@ data:
     OAUTH_CLIENT_SECRET = os.getenv('OAUTH_CLIENT_SECRET')
     ADMIN_USERS = os.getenv('ADMIN_USERS')
 
-    c.JupyterHub.authenticator_class = LocalGenericOAuthenticator
+    c.JupyterHub.authenticator_class = CustomLocalOAuthenticator
 
     c.Authenticator.admin_users = set(ADMIN_USERS.split(';'))
 
-    c.LocalGenericOAuthenticator.client_id = OAUTH_CLIENT_ID
-    c.LocalGenericOAuthenticator.client_secret = OAUTH_CLIENT_SECRET
-    c.LocalGenericOAuthenticator.username_key = "email"
-    c.LocalGenericOAuthenticator.userdata_method = "GET"
-    c.LocalGenericOAuthenticator.extra_params = dict(client_id=OAUTH_CLIENT_ID, client_secret=OAUTH_CLIENT_SECRET)
-    c.LocalGenericOAuthenticator.basic_auth = False
-    c.LocalGenericOAuthenticator.create_system_users = True
-    c.LocalGenericOAuthenticator.add_user_cmd = ['adduser', '-q', '--gecos', '""', '--disabled-password', '--force-badname']
-    c.LocalGenericOAuthenticator.auto_login = True
+    c.CustomLocalOAuthenticator.client_id = OAUTH_CLIENT_ID
+    c.CustomLocalOAuthenticator.client_secret = OAUTH_CLIENT_SECRET
+    c.CustomLocalOAuthenticator.username_key = "email"
+    c.CustomLocalOAuthenticator.userdata_method = "GET"
+    c.CustomLocalOAuthenticator.extra_params = dict(client_id=OAUTH_CLIENT_ID, client_secret=OAUTH_CLIENT_SECRET)
+    c.CustomLocalOAuthenticator.basic_auth = False
+    c.CustomLocalOAuthenticator.create_system_users = True
+    c.CustomLocalOAuthenticator.add_user_cmd = ['adduser', '-q', '--gecos', '""', '--disabled-password', '--force-badname']
+    c.CustomLocalOAuthenticator.auto_login = True
 
     # Set up WIPP UI url for integration with WIPP
     c.ModularSpawner.environment = {
