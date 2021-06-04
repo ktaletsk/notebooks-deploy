@@ -30,7 +30,7 @@ RUN wget -q https://repo.continuum.io/miniconda/Miniconda3-py38_4.8.2-Linux-x86_
       nodejs=12 configurable-http-proxy && \
     /opt/conda/bin/pip install --upgrade pip && \
     /opt/conda/bin/pip install jupyterhub==1.0.0 \
-      git+https://github.com/labshare/oauthenticator.git \
+      oauthenticator==14.0.0 \
       jupyterhub-kubespawner==0.11.1 \
       /modularspawner && \
     rm /tmp/miniconda.sh && \
