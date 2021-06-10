@@ -24,6 +24,7 @@ rm deploy/kubernetes/jupyterhub-configs.yaml.bak
 
 CONFIG_HASH=$(shasum deploy/kubernetes/jupyterhub-configs.yaml | cut -d ' ' -f 1 | tr -d '\n')
 
+echo $HUB_VERSION
 sed -i.bak \
     -e "s/HUB_VERSION_VALUE/${HUB_VERSION}/g" \
     deploy/kubernetes/jupyterhub-deployment.yaml
