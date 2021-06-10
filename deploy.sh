@@ -13,8 +13,8 @@ sed -i.bak \
     -e "s/BASE_STACK_VALUE/${BASE_STACK}/g" \
     -e "s/STACKS_VALUE/${STACKS}/g" \
     -e "s/STACKS_NAMES_VALUE/${STACKS_NAMES}/g" \
+    -e "s/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g" \
     deploy/kubernetes/jupyterhub-configs.yaml
-#     -e "s/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g" \
 #     -e "s/STORAGE_PER_USER_VALUE/${STORAGE_PER_USER}/g" \
 #     -e "s/WIPP_STORAGE_PVC_VALUE/${WIPP_STORAGE_PVC}/g" \
 #     -e "s|WIPP_UI_VALUE|${WIPP_UI}|g" \
