@@ -15,8 +15,8 @@ sed -i.bak \
     -e "s/STACKS_NAMES_VALUE/${STACKS_NAMES}/g" \
     -e "s/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g" \
     -e "s/STORAGE_PER_USER_VALUE/${STORAGE_PER_USER}/g" \
+    -e "s/WIPP_STORAGE_PVC_VALUE/${WIPP_STORAGE_PVC}/g" \
     deploy/kubernetes/jupyterhub-configs.yaml
-#     -e "s/WIPP_STORAGE_PVC_VALUE/${WIPP_STORAGE_PVC}/g" \
 #     -e "s|WIPP_UI_VALUE|${WIPP_UI}|g" \
 #     -e "s|WIPP_API_INTERNAL_VALUE|${WIPP_API_INTERNAL}|g" \
 #     -e "s|WIPP_NOTEBOOKS_PATH_VALUE|${WIPP_NOTEBOOKS_PATH}|g" \
