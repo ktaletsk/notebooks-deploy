@@ -20,7 +20,7 @@ sed -i.bak \
     -e "s|WIPP_API_INTERNAL_VALUE|${WIPP_API_INTERNAL}|g" \
     -e "s|WIPP_NOTEBOOKS_PATH_VALUE|${WIPP_NOTEBOOKS_PATH}|g" \
     deploy/kubernetes/jupyterhub-configs.yaml
-# rm deploy/kubernetes/jupyterhub-configs.yaml.bak
+rm deploy/kubernetes/jupyterhub-configs.yaml.bak
 
 # CONFIG_HASH=$(shasum deploy/kubernetes/jupyterhub-configs.yaml | cut -d ' ' -f 1 | tr -d '\n')
 
