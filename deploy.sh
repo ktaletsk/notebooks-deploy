@@ -3,26 +3,26 @@
 source .env
 
 # Backup file extension required to support Mac versions of sed
-# sed -i.bak \
-#     -e "s/SHARED_STORAGE_VALUE/${SHARED_STORAGE}/g" \
-#     -e "s/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g" \
-#     deploy/kubernetes/storage.yaml
-# rm deploy/kubernetes/storage.yaml.bak
+sed -i.bak \
+    -e "s/SHARED_STORAGE_VALUE/${SHARED_STORAGE}/g" \
+    -e "s/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g" \
+    deploy/kubernetes/storage.yaml
+rm deploy/kubernetes/storage.yaml.bak
 
-# sed -i.bak \
-#     -e "s/BASE_STACK_VALUE/${BASE_STACK}/g" \
-#     -e "s/STACKS_VALUE/${STACKS}/g" \
-#     -e "s/STACKS_NAMES_VALUE/${STACKS_NAMES}/g" \
-#     -e "s/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g" \
-#     -e "s/STORAGE_PER_USER_VALUE/${STORAGE_PER_USER}/g" \
-#     -e "s/WIPP_STORAGE_PVC_VALUE/${WIPP_STORAGE_PVC}/g" \
-#     -e "s|WIPP_UI_VALUE|${WIPP_UI}|g" \
-#     -e "s|WIPP_API_INTERNAL_VALUE|${WIPP_API_INTERNAL}|g" \
-#     -e "s|WIPP_NOTEBOOKS_PATH_VALUE|${WIPP_NOTEBOOKS_PATH}|g" \
-#     deploy/kubernetes/jupyterhub-configs.yaml
-# rm deploy/kubernetes/jupyterhub-configs.yaml.bak
+sed -i.bak \
+    -e "s/BASE_STACK_VALUE/${BASE_STACK}/g" \
+    -e "s/STACKS_VALUE/${STACKS}/g" \
+    -e "s/STACKS_NAMES_VALUE/${STACKS_NAMES}/g" \
+    -e "s/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g" \
+    -e "s/STORAGE_PER_USER_VALUE/${STORAGE_PER_USER}/g" \
+    -e "s/WIPP_STORAGE_PVC_VALUE/${WIPP_STORAGE_PVC}/g" \
+    -e "s|WIPP_UI_VALUE|${WIPP_UI}|g" \
+    -e "s|WIPP_API_INTERNAL_VALUE|${WIPP_API_INTERNAL}|g" \
+    -e "s|WIPP_NOTEBOOKS_PATH_VALUE|${WIPP_NOTEBOOKS_PATH}|g" \
+    deploy/kubernetes/jupyterhub-configs.yaml
+rm deploy/kubernetes/jupyterhub-configs.yaml.bak
 
-# CONFIG_HASH=$(shasum deploy/kubernetes/jupyterhub-configs.yaml | cut -d ' ' -f 1 | tr -d '\n')
+CONFIG_HASH=$(shasum deploy/kubernetes/jupyterhub-configs.yaml | cut -d ' ' -f 1 | tr -d '\n')
 
 echo $HUB_VERSION
 sed -i.bak \
