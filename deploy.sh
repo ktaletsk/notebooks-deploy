@@ -26,18 +26,18 @@ CONFIG_HASH=$(shasum deploy/kubernetes/jupyterhub-configs.yaml | cut -d ' ' -f 1
 
 sed -i.bak \
     -e "s/HUB_VERSION_VALUE/${HUB_VERSION}/g" \
-    -e "s/CONFIG_HASH_VALUE/${CONFIG_HASH}/g" \
     deploy/kubernetes/jupyterhub-deployment.yaml
-rm deploy/kubernetes/jupyterhub-deployment.yaml.bak
+#    -e "s/CONFIG_HASH_VALUE/${CONFIG_HASH}/g" \
+# rm deploy/kubernetes/jupyterhub-deployment.yaml.bak
 
-sed -i.bak \
-    deploy/kubernetes/jupyterhub-services.yaml
-rm deploy/kubernetes/jupyterhub-services.yaml.bak
+# sed -i.bak \
+#     deploy/kubernetes/jupyterhub-services.yaml
+# rm deploy/kubernetes/jupyterhub-services.yaml.bak
 
-sed -i.bak \
-    -e "s|JUPYTERHUB_URL_VALUE|${JUPYTERHUB_URL}|g" \
-    deploy/kubernetes/jupyterhub-ingress.yaml
-rm deploy/kubernetes/jupyterhub-ingress.yaml.bak
+# sed -i.bak \
+#     -e "s|JUPYTERHUB_URL_VALUE|${JUPYTERHUB_URL}|g" \
+#     deploy/kubernetes/jupyterhub-ingress.yaml
+# rm deploy/kubernetes/jupyterhub-ingress.yaml.bak
 
 
 
