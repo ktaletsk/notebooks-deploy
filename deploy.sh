@@ -9,8 +9,8 @@ sed -i.bak \
     deploy/kubernetes/storage.yaml
 rm deploy/kubernetes/storage.yaml.bak
 
-# sed -i.bak \
-#     -e "s/BASE_STACK_VALUE/${BASE_STACK}/g" \
+sed -i.bak \
+    -e "s/BASE_STACK_VALUE/${BASE_STACK}/g" \
 #     -e "s/STACKS_VALUE/${STACKS}/g" \
 #     -e "s/STACKS_NAMES_VALUE/${STACKS_NAMES}/g" \
 #     -e "s/STORAGE_CLASS_VALUE/${STORAGE_CLASS}/g" \
@@ -19,7 +19,7 @@ rm deploy/kubernetes/storage.yaml.bak
 #     -e "s|WIPP_UI_VALUE|${WIPP_UI}|g" \
 #     -e "s|WIPP_API_INTERNAL_VALUE|${WIPP_API_INTERNAL}|g" \
 #     -e "s|WIPP_NOTEBOOKS_PATH_VALUE|${WIPP_NOTEBOOKS_PATH}|g" \
-#     deploy/kubernetes/jupyterhub-configs.yaml
+    deploy/kubernetes/jupyterhub-configs.yaml
 # rm deploy/kubernetes/jupyterhub-configs.yaml.bak
 
 # CONFIG_HASH=$(shasum deploy/kubernetes/jupyterhub-configs.yaml | cut -d ' ' -f 1 | tr -d '\n')
