@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-miniconda3
+FROM frolvlad/alpine-miniconda3:python3.7@sha256:ca48cb5d359d6de5311d909754f39bbe34227f583158b7a4eec9089d4686aa01
 LABEL maintainer="Labshare <konstantin.taletskiy@labshare.org>"
 
 # Track semantic versioning
