@@ -89,8 +89,7 @@ pipeline {
                                 ['java.yaml', 'scala.yaml'],
                                 ['cpp.yaml'],
                                 ['bash.yaml'],
-                                ['tensorflow.yaml', 'pytorch.yaml', 'fastai.yaml'],
-                                ['latex.yaml']
+                                ['tensorflow.yaml', 'pytorch.yaml', 'fastai.yaml']
                             ]
 
                             // CPU-based images
