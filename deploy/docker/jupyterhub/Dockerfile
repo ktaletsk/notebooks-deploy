@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM frolvlad/alpine-miniconda3:python3.7@sha256:ca48cb5d359d6de5311d909754f39bbe34227f583158b7a4eec9089d4686aa01
 LABEL maintainer="Labshare <konstantin.taletskiy@labshare.org>"
 
 # Track semantic versioning
@@ -13,31 +13,15 @@ COPY cull-idle-servers.py /srv/jupyterhub/config/cull-idle-servers.py
 # Copy ModularSpawner
 COPY modularspawner /modularspawner
 
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get -y update && \
-    apt-get -y upgrade && \
-    apt-get -y install wget git bzip2 && \
-    apt-get purge && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-ENV LANG C.UTF-8
-
-RUN wget -q https://repo.continuum.io/miniconda/Miniconda3-py38_4.8.2-Linux-x86_64.sh -O /tmp/miniconda.sh  && \
-    echo 'cbda751e713b5a95f187ae70b509403f */tmp/miniconda.sh' | md5sum -c - && \
-    bash /tmp/miniconda.sh -f -b -p /opt/conda && \
-    /opt/conda/bin/conda install --yes -c conda-forge \
-      sqlalchemy tornado jinja2 traitlets requests pip pycurl \
+RUN conda install --yes -c conda-forge \
+      sqlalchemy tornado jinja2 traitlets requests pycurl \
       nodejs=12 configurable-http-proxy && \
-    /opt/conda/bin/pip install --upgrade pip && \
-    /opt/conda/bin/pip install jupyterhub==1.0.0 \
-      git+https://github.com/labshare/oauthenticator.git \
-      jupyterhub-kubespawner==0.11.1 \
+    pip install jupyterhub==1.4.1 \
+      oauthenticator==14.0.0 \
+      jupyterhub-kubespawner==1.0.0 \
       /modularspawner && \
-    rm /tmp/miniconda.sh && \
+    npm install -g polus-railyard && \
     rm -rf ~/.cache ~/.npm
-ENV PATH=/opt/conda/bin:$PATH
-
-RUN npm install -g polus-railyard
 
 RUN mkdir -p /srv/jupyterhub/
 WORKDIR /srv/jupyterhub/
