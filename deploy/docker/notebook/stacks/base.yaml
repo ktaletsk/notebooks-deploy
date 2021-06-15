@@ -3,8 +3,9 @@ base: "ubuntu:focal-20210416@sha256:86ac87f73641c920fb42cc9612d4fb57b5626b56ea2a
 env:
   - PATH: $CONDA_DIR/bin:$PATH
   - HOME: /home/$NB_USER
-  - MINICONDA_VERSION: 4.7.12
-  - CONDA_VERSION: 4.8.2
+  - MINICONDA_VERSION: py39_4.9.2
+  - MINICONDA_INSTALLER_HASHSUM: b4e46fcc8029e2cfa731b788f25b1d36
+  - CONDA_VERSION: 4.9.2
   - XDG_CACHE_HOME: /home/$NB_USER/.cache/
 apt:
   - wget
@@ -42,45 +43,41 @@ conda_channels:
 conda:
   - tini: 0.18.0
   - notebook: 6.4.0
-  # - jupyterhub
+  - jupyterhub
   - jupyterlab: 3.0.16
-  # - ipywidgets: 7.5*
-  # - jupyter-archive: 0.5.5
-  # - numexpr: 2.6*
-  # - matplotlib-base: 3.1*
-  # - scipy: 1.3*
-  # - feather-format
-  # - nbformat
-  # - sos-notebook: 0.20*
-  # - sos-python: 0.18*
-  # - nbdime: 1.1*
-# pip:
-  # - facets-overview: 1.0.0
-  # - jupyterlab-quickopen: 0.3.0
-  # - jupyterlab-git: 0.9.0
-  # - jupyterlab-wipp: 0.3.0
-  # - nbresuse
-  # - bfio: 2.1.7
-  # - filepattern: 1.2.4
-# labextensions:
-  # - "@jupyter-widgets/jupyterlab-manager": 1.1.0
-  # - transient-display-data: 0.3.0
-  # - jupyterlab-sos: 0.5.3
-  # - "@jupyterlab/hub-extension": 1.1.2
-  # - "@webio/jupyter-lab-provider"
-  # - "@aquirdturtle/collapsible_headings": 0.5.0
-  # - jupyterlab-python-file: 0.3.0
-  # - "@parente/jupyterlab-quickopen": 0.3.0
-  # - jupyterlab-spreadsheet: 0.2.0
-  # - "@krassowski/jupyterlab_go_to_definition": 0.7.1
-  # - jupyterlab_wipp: 0.3.0
-  # - jupyterlab-topbar-extension: 0.4.0
-  # - jupyterlab-system-monitor: 0.4.1
-# scripts:
-  # - sos_kernel_install: |
-  #     python -m sos_notebook.install
-  # - jupyterlab_wipp_activate: |
-  #     jupyter serverextension enable --py jupyterlab_wipp
+  - ipywidgets: 7.6*
+  - jupyter-archive: 3.0.1
+  - numexpr: 2.7*
+  - matplotlib-base: 3.4*
+  - scipy: 1.6*
+  - feather-format
+  - nbformat
+  - sos-notebook: 0.22*
+  - jupyterlab-sos: 0.8.1
+  - sos-papermill: 0.2.1
+  - sos-python: 0.18*
+  - nbdime: 3.1*
+  - jupyterlab-git: 0.30*
+  - jupyterlab-topbar: 0.6.1
+  - jupyterlab-python-file: 0.5.2
+  - ipywidgets: 7.6.3
+  - jupyterlab-lsp: 3.7.0
+  - python-lsp-server
+  - jupyterlab-system-monitor: 0.8.0
+  - jupyterlab-transient-display-data: 0.4.0
+pip:
+  - facets-overview: 1.0.0
+  - jupyterlab-wipp: 0.3.0
+  - bfio: 2.1.8
+  - filepattern: 1.4.6
+  - jupyterlab-spreadsheet-editor: 0.6.0
+  - jupyterlab-quickopen: 1.0.0
+  - aquirdturtle-collapsible-headings: 3.1.0
+labextensions:
+  - jupyterlab_wipp: 1.1.0
+scripts:
+  - jupyterlab_wipp_activate: |
+      jupyter serverextension enable --py jupyterlab_wipp
 addfiles:
   - fix-permissions:
       destination: /usr/local/bin/fix-permissions

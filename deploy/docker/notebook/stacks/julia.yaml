@@ -5,6 +5,8 @@ env:
 conda: 
   - julia: 1.0.3
   - sos-julia: 0.18*
+labextensions:
+  - "@webio/jupyter-lab-provider"
 scripts:
   - julia: |
       julia -e 'import Pkg; Pkg.update()' && \

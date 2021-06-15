@@ -60,7 +60,7 @@ RUN mkdir /home/$NB_USER/work && \
 # Clear all temporary and auxiliary files to minimize image size
 RUN cd /tmp && \
     wget --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
-    echo "0dba759b8ecfc8948f626fa18785e3d8 *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
+    echo "${MINICONDA_INSTALLER_HASHSUM}  Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
     /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
     rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
     echo "conda ${CONDA_VERSION}" >> $CONDA_DIR/conda-meta/pinned && \
@@ -68,12 +68,12 @@ RUN cd /tmp && \
     $CONDA_DIR/bin/conda config --system --set auto_update_conda false && \
     $CONDA_DIR/bin/conda config --system --set show_channel_urls true && \
     $CONDA_DIR/bin/conda config --system --set channel_priority strict && \
-    $CONDA_DIR/bin/conda install pycryptosat && \
-    $CONDA_DIR/bin/conda install -y {% for package in conda %}{{ package.key }}{% if package.value %}={{package.value}}{% endif %} {% endfor %}&& \
+    $CONDA_DIR/bin/conda install mamba -n base -c conda-forge && \
+    mamba install -y {% for package in conda %}{{ package.key }}{% if package.value %}={{package.value}}{% endif %} {% endfor %}&& \
     pip install {% for package in pip %}{{ package.key }}{% if package.value %}=={{package.value}}{% endif %} {% endfor %}&& \
     $CONDA_DIR/bin/conda list python | grep '^python ' | tr -s ' ' | cut -d '.' -f 1,2 | sed 's/$/.*/' >> $CONDA_DIR/conda-meta/pinned && \
     $CONDA_DIR/bin/conda list tini | grep tini | tr -s ' ' | cut -d ' ' -f 1,2 >> $CONDA_DIR/conda-meta/pinned && \
-    npm cache clean --force && \
+#     npm cache clean --force && \
     jupyter notebook --generate-config && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     conda clean --all -f -y && \
