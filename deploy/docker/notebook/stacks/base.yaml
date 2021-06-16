@@ -50,7 +50,7 @@ conda:
   - numexpr: 2.7*
   - matplotlib-base: 3.4*
   - scipy: 1.6*
-  - feather-format
+  # - feather-format
   - nbformat
   - sos-notebook: 0.22*
   - jupyterlab-sos: 0.8.1

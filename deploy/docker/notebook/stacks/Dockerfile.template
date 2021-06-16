@@ -73,7 +73,7 @@ RUN cd /tmp && \
     pip install {% for package in pip %}{{ package.key }}{% if package.value %}=={{package.value}}{% endif %} {% endfor %}&& \
     $CONDA_DIR/bin/conda list python | grep '^python ' | tr -s ' ' | cut -d '.' -f 1,2 | sed 's/$/.*/' >> $CONDA_DIR/conda-meta/pinned && \
     $CONDA_DIR/bin/conda list tini | grep tini | tr -s ' ' | cut -d ' ' -f 1,2 >> $CONDA_DIR/conda-meta/pinned && \
-#     npm cache clean --force && \
+    npm cache clean --force && \
     jupyter notebook --generate-config && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     conda clean --all -f -y && \
