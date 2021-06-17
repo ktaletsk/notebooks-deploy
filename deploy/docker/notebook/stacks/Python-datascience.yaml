@@ -12,7 +12,6 @@ conda:
   - statsmodels: 0.12*
   - dvc: 2.3*
   - beautifulsoup4: 4.9*
-  - protobuf: 3.17*
   - xlrd: 2*
   - numba: 0.53*
   - sqlalchemy: 1.4*
