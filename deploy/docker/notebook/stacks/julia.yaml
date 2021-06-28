@@ -1,19 +1,35 @@
 name: julia
 env:
-  - JULIA_DEPOT_PATH: /opt/julia
-  - JULIA_PKGDIR: /opt/julia
-conda: 
-  - julia: 1.0.3
-  - sos-julia: 0.18*
-labextensions:
-  - "@webio/jupyter-lab-provider"
+  - JULIA_PATH: /opt/julia
+  - JULIA_GPG: 3673DF529D9049477F76B37566E3C7DC03D6E495
+  - JULIA_VERSION: 1.6.1
+  - INSTALLER_HASHSUM: 7c888adec3ea42afbfed2ce756ce1164a570d50fa7506c3f2e1e2cbc49d52506
+pip: 
+  - sos-julia: 0.18.5
+path:
+  - $JULIA_PATH/bin
+apt:
+  - gnupg
+  - dirmngr
 scripts:
   - julia: |
+      folder="$(echo "$JULIA_VERSION" | cut -d. -f1-2)" && \
+      curl -fL -o julia.tar.gz.asc "https://julialang-s3.julialang.org/bin/linux/x64/${folder}/julia-${JULIA_VERSION}-linux-x86_64.tar.gz.asc" && \
+      curl -fL -o julia.tar.gz     "https://julialang-s3.julialang.org/bin/linux/x64/${folder}/julia-${JULIA_VERSION}-linux-x86_64.tar.gz" && \
+      echo "${INSTALLER_HASHSUM} *julia.tar.gz" | sha256sum -c - && \
+      export GNUPGHOME="$(mktemp -d)" && \
+      gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$JULIA_GPG" && \
+      gpg --batch --verify julia.tar.gz.asc julia.tar.gz && \
+      command -v gpgconf > /dev/null && gpgconf --kill all && \
+      rm -rf "$GNUPGHOME" julia.tar.gz.asc && \
+      mkdir "$JULIA_PATH" && \
+      tar -xzf julia.tar.gz -C "$JULIA_PATH" --strip-components 1 && \
+      rm julia.tar.gz && \
       julia -e 'import Pkg; Pkg.update()' && \
       julia -e "using Pkg; \
                 pkg\"add Feather DataFrames NamedArrays RDatasets IJulia InstantiateFromURL HDF5 https://github.com/probcomp/Gen\";\
                 pkg\"precompile\"" && \
       # move kernelspec out of home \
-      mv $HOME/.local/share/jupyter/kernels/julia-1.0/kernel.json $CONDA_DIR/share/jupyter/kernels/julia-1.0/kernel.json && \
+      mv $HOME/.local/share/jupyter/kernels/julia-1.6 $CONDA_DIR/share/jupyter/kernels/julia-1.6 && \
       rm -rf $HOME/.local && \
-      fix-permissions $JULIA_PKGDIR $CONDA_DIR/share/jupyter
+      fix-permissions $JULIA_PATH $CONDA_DIR/share/jupyter
