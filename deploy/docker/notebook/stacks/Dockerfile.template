@@ -22,6 +22,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 {% set indent = joiner(' \\\n    ') %}ENV {% for v in env %}{{ indent() }}{{ v.key }}={% if v.value %}{{v.value}}{% endif %}{% endfor %}
 
+{% set indent = joiner(':') %}ENV PATH={% for v in path %}{{ indent() }}{{ v.key }}{% endfor %}:$PATH
+
 USER root
 
 RUN apt-get update && \

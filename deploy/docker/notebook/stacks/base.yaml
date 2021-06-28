@@ -1,12 +1,13 @@
 name: base
 base: "ubuntu:focal-20210416@sha256:86ac87f73641c920fb42cc9612d4fb57b5626b56ea2a19b894d0673fd5b4f2e9"
 env:
-  - PATH: $CONDA_DIR/bin:$PATH
   - HOME: /home/$NB_USER
   - MINICONDA_VERSION: py39_4.9.2
   - MINICONDA_INSTALLER_HASHSUM: b4e46fcc8029e2cfa731b788f25b1d36
   - CONDA_VERSION: 4.9.2
   - XDG_CACHE_HOME: /home/$NB_USER/.cache/
+path:
+  - $CONDA_DIR/bin
 apt:
   - wget
   - bzip2
@@ -50,9 +51,6 @@ conda:
   - numexpr: 2.7*
   - matplotlib-base: 3.4*
   - scipy: 1.6*
-  # - libprotobuf: 3.11.*
-  # - arrow-cpp: 4.0.*
-  # - pyarrow: 4.0.*
   - feather-format
   - nbformat
   - sos-notebook: 0.22*
