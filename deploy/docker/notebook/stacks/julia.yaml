@@ -27,7 +27,7 @@ scripts:
       rm julia.tar.gz && \
       julia -e 'import Pkg; Pkg.update()' && \
       julia -e "using Pkg; \
-                pkg\"add Feather DataFrames NamedArrays RDatasets IJulia InstantiateFromURL HDF5 https://github.com/probcomp/Gen\";\
+                pkg\"add Feather DataFrames NamedArrays RDatasets IJulia InstantiateFromURL HDF5 LanguageServer https://github.com/probcomp/Gen\";\
                 pkg\"precompile\"" && \
       # move kernelspec out of home \
       mv $HOME/.local/share/jupyter/kernels/julia-1.6 $CONDA_DIR/share/jupyter/kernels/julia-1.6 && \
