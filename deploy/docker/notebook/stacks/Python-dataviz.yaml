@@ -16,7 +16,7 @@ conda:
   - bqplot: 0.12*
   - pythreejs: 2.3*
   - py4j: 0.10.9
-  - beakerx: 1.4.1
+  # - beakerx: 1.4.1 #causing conflicts with Java stack; creates multiple additional language kernels
   - pyviz_comms: 2.0*
 # labextensions:
 #   - itkwidgets: 0.22.0
