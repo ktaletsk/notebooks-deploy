@@ -30,13 +30,12 @@ RUN apt-get update && \
     apt-get -y install software-properties-common && \
     add-apt-repository ppa:apt-fast/stable && \
     apt-get update && \
-    apt-get -y install apt-fast && \
+    apt-get -y install apt-fast locales && \
     apt-fast update && \
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen && \
     apt-fast install -yq --no-install-recommends {% for package in apt %}{{ package.key }} {% endfor %} && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen
+    rm -rf /var/lib/apt/lists/*    
 
 # Create NB_USER wtih name jovyan user with UID=1000 and in the 'users' group
 # and make sure these dirs are writable by the `users` group.
