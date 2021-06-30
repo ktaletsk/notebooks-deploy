@@ -1,5 +1,4 @@
 name: pytorch
 pip:
-  - torch: 1.4.0
-  - torchvision: 0.5.0
-  - kornia: 0.2.0
+  - https://download.pytorch.org/whl/cu111/torch-1.9.0%2Bcu111-cp39-cp39-linux_x86_64.whl
+  - https://download.pytorch.org/whl/cu111/torchvision-0.10.0%2Bcu111-cp39-cp39-linux_x86_64.whl
